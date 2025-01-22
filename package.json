@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "ts-defold-castlefight",
+  "version": "0.1.0",
+  "description": "Castle Fight",
+  "author": "t1r",
+  "keywords": [
+    "typescript",
+    "lua",
+    "defold"
+  ],
+  "engines": {
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+  },
+  "scripts": {
+    "resolve": "library resolve",
+    "build": "tstl",
+    "lint": "eslint src",
+    "prettier": "prettier \"./**/*.{yml,json,ts,md,d.ts}\" --write",
+    "dev": "tstl --watch"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0",
+    "@ts-defold/library": "^0.1.1",
+    "@ts-defold/tstl-userdata-sugar": "^1.0.1",
+    "@ts-defold/types": "^1.2.51",
+    "eslint": "^9.0.0",
+    "tstl-export-to-global": "^1.0.1",
+    "tstl-trim-extensions": "^1.0.3",
+    "typescript": "5.7.2",
+    "typescript-eslint": "^8.0.0",
+    "typescript-to-lua": "~1.29.0",
+    "typescript-tstl-plugin": "^0.3.2"
+  }
+}

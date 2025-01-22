@@ -1,0 +1,86 @@
+{
+  :bundle {
+    :android {
+      :architecture {
+        :arm64-android true
+        :armv7-android false
+      }
+      :format "apk"
+      :install true
+      :launch true
+    }
+    :build-report false
+    :contentless false
+    :debug-symbols true
+    :html5 {
+      :architecture {
+        :js-web true
+        :wasm-web true
+      }
+    }
+    :liveupdate false
+    :texture-compression "enabled"
+    :variant "debug"
+  }
+  :code {
+    :find {
+      :case-sensitive false
+      :replacement "/cube#cube"
+      :term "render3d"
+      :whole-word false
+      :wrap false
+    }
+  }
+  :open-assets {
+    :term "level_2"
+  }
+  :search-in-files {
+    :exts ""
+    :include-libraries false
+    :term "random"
+  }
+  :workflow {
+    :recent-files [
+      [
+        "/main/map.tilesource"
+        :scene
+      ]
+      [
+        "/main/map.tilemap"
+        :scene
+      ]
+      [
+        "/input/game.input_binding"
+        :cljfx-form-view
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
+      ]
+      [
+        "/main/sprites.atlas"
+        :scene
+      ]
+      [
+        "/main/main.collection"
+        :scene
+      ]
+      [
+        "/collections/unit/unit.go"
+        :scene
+      ]
+      [
+        "/modules/gameState.lua"
+        :code
+      ]
+      [
+        "/scripts/game.script"
+        :code
+      ]
+      [
+        "/scripts/unit.script"
+        :code
+      ]
+    ]
+  }
+}

@@ -26,7 +26,7 @@
     :find {
       :case-sensitive false
       :replacement "/cube#cube"
-      :term "resetAnimation"
+      :term "roll1"
       :whole-word false
       :wrap false
     }
@@ -66,20 +66,20 @@
         :cljfx-form-view
       ]
       [
-        "/scripts/unit.script"
-        :code
-      ]
-      [
-        "/scripts/game.script"
-        :code
+        "/main/main.collection"
+        :scene
       ]
       [
         "/main/sprites.atlas"
         :scene
       ]
       [
-        "/main/main.collection"
-        :scene
+        "/scripts/unit.script"
+        :code
+      ]
+      [
+        "/scripts/game.script"
+        :code
       ]
     ]
   }

@@ -160,4 +160,143 @@ animations {
   playback: PLAYBACK_LOOP_FORWARD
   fps: 6
 }
+animations {
+  id: "elite-soldier-s"
+  images {
+    image: "/assets/units/elite-soldier/down/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
+animations {
+  id: "elite-soldier-n"
+  images {
+    image: "/assets/units/elite-soldier/up/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
+animations {
+  id: "elite-soldier-e"
+  images {
+    image: "/assets/units/elite-soldier/side/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
+animations {
+  id: "elite-soldier-w"
+  images {
+    image: "/assets/units/elite-soldier/side/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/side/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+  flip_horizontal: 1
+}
+animations {
+  id: "elite-soldier-ne"
+  images {
+    image: "/assets/units/elite-soldier/up-d/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
+animations {
+  id: "elite-soldier-nw"
+  images {
+    image: "/assets/units/elite-soldier/up-d/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/up-d/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+  flip_horizontal: 1
+}
+animations {
+  id: "elite-soldier-se"
+  images {
+    image: "/assets/units/elite-soldier/down-d/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
+animations {
+  id: "elite-soldier-sw"
+  images {
+    image: "/assets/units/elite-soldier/down-d/1.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/2.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/3.png"
+  }
+  images {
+    image: "/assets/units/elite-soldier/down-d/4.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+  flip_horizontal: 1
+}
 extrude_borders: 2

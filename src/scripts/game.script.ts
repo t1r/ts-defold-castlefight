@@ -1,8 +1,10 @@
+import { createUnit } from '../modules/factory';
 import {
 	ArmorType,
-	AttackType,
+	Building,
 	Unit,
 	UnitState,
+	UnitType,
 	gameState as gs,
 } from '../modules/gameState';
 
@@ -17,16 +19,36 @@ interface action {
 interface message {}
 
 const BASE_TEAM_1 = vmath.vector3(100, 320, 1);
-// const BASE_TEAM_1 = vmath.vector3(0, 0, 1);
 const BASE_TEAM_2 = vmath.vector3(840, 320, 1);
 
 export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
-	create_units(this);
+	spawnBuildings();
 }
 
 export function update(this: props, dt: number): void {
+	handleUpdateUnits(dt);
+	handleUpdateBuildings(dt);
+}
+
+export function on_input(this: props, _actionId: hash, action: action): void {
+	if (_actionId === hash('touch') && action.pressed) {
+		pprint('----------------- touch -----------------');
+		pprint([gs.getUnits()]);
+	}
+}
+
+export function on_message(
+	this: props,
+	_messageId: hash,
+	_message: message,
+	_sender: url,
+): void {
+	pprint([_messageId, _sender]);
+}
+
+function handleUpdateUnits(dt: number) {
 	const units = gs.getUnits();
 
 	for (let i = 0; i < units.length; i++) {
@@ -34,7 +56,7 @@ export function update(this: props, dt: number): void {
 
 		if (unit.hp <= 0) {
 			unit.state = UnitState.Dead;
-		} else if (isAliveEnemyInRange(units, unit.inAttackRange)) {
+		} else if (isAliveEnemyInRange(units, unit.enemyInAttackRange)) {
 			unit.state = UnitState.Attack;
 		} else if (isAliveEnemyInRange(units, unit.nearEnemy)) {
 			unit.state = UnitState.MoveToEnemy;
@@ -54,94 +76,52 @@ export function update(this: props, dt: number): void {
 	}
 }
 
-export function on_input(this: props, _actionId: hash, action: action): void {
-	if (_actionId === hash('touch') && action.pressed) {
-		pprint('----------------- touch -----------------');
-		pprint([gs.getUnits()]);
+function handleUpdateBuildings(dt: number) {
+	const buildings = gs.getBuildings();
+	for (let i = 0; i < buildings.length; i++) {
+		const building = buildings[i];
+		if (building.timeToRespawnUnit <= 0) {
+			spawnUnit(building.team, building.unitType);
+			building.timeToRespawnUnit = building.originTimeToRespawnUnit;
+		} else {
+			building.timeToRespawnUnit -= dt;
+		}
 	}
 }
 
-export function on_message(
-	this: props,
-	_messageId: hash,
-	_message: message,
-	_sender: url,
-): void {
-	pprint([_messageId, _sender]);
+function spawnBuildings() {
+	const building1: Building = {
+		hp: 500,
+		armorType: ArmorType.Heavy,
+		originTimeToRespawnUnit: 10,
+		unitType: 'infantry',
+		team: 1,
+		id: hash('buildingTeam1'),
+		timeToRespawnUnit: 0,
+	};
+	gs.addBuilding(building1);
+
+	const building2: Building = {
+		hp: 500,
+		armorType: ArmorType.Heavy,
+		originTimeToRespawnUnit: 10,
+		unitType: 'elite-soldier',
+		team: 2,
+		id: hash('buildingTeam2'),
+		timeToRespawnUnit: 0,
+	};
+	gs.addBuilding(building2);
 }
 
-export function create_units(_ctx: props) {
-	const startPositionTeam1Unit1 = BASE_TEAM_1;
-	const startPositionTeam2Unit1 = BASE_TEAM_2;
-	const startPositionTeam2Unit2 = BASE_TEAM_2;
+function spawnUnit(team: number, unitType: UnitType) {
+	const position = team === 1 ? BASE_TEAM_1 : BASE_TEAM_2;
 
-	const id1 = factory.create(
-		'/factories#unit',
-		startPositionTeam1Unit1,
-		undefined,
-		'infantry',
-	);
-	const unit1: Unit = {
-		id: id1,
-		state: UnitState.MovingToEnemyBase,
-		nearEnemy: [],
-		inAttackRange: [],
-		team: 1,
-		elapsedAttackTime: 0,
-
-		hp: 60,
-		armorType: ArmorType.Normal,
-		attackType: AttackType.Normal,
-		attackSpeed: 600,
-		attack: 11,
-		dir: vmath.vector3(0, -1, 0),
-		remainingTimeToDelete: 4,
+	const props = {
+		type: hash(unitType),
 	};
-
-	const id2 = factory.create(
-		'/factories#unit',
-		startPositionTeam2Unit1,
-		undefined,
-		'infantry',
-	);
-	const unit2: Unit = {
-		id: id2,
-		state: UnitState.MovingToEnemyBase,
-		nearEnemy: [],
-		inAttackRange: [],
-		team: 2,
-		elapsedAttackTime: 0,
-
-		hp: 60,
-		armorType: ArmorType.Normal,
-		attackType: AttackType.Normal,
-		attackSpeed: 600,
-		attack: 12,
-		dir: vmath.vector3(0, -1, 0),
-		remainingTimeToDelete: 4,
-	};
-
-	// const id4 = factory.create('/factories#unit', startPositionTeam2Unit2, undefined, 'infantry');
-	// const unit4: Unit = {
-	// 	id: id4,
-	// 	state: UnitState.MovingToEnemyBase,
-	// 	nearEnemy: [],
-	// 	inAttackRange: [],
-	// 	team: 2,
-	// 	elapsedAttackTime: 0,
-
-	// 	hp: 60,
-	// 	armorType: ArmorType.Normal,
-	// 	attackType: AttackType.Normal,
-	// 	attackSpeed: 600,
-	// 	attack: 10,
-	// 	dir: vmath.vector3(0, -1, 0),
-	//	remainingTimeToDelete: 4,
-	// };
-
-	gs.addUnit(unit1);
-	gs.addUnit(unit2);
-	// gs.addUnitToTeam1(unit4);
+	const id = factory.create('/factories#unit', position, undefined, props);
+	const unit = createUnit(id, team, unitType);
+	gs.addUnit(unit);
 }
 
 function movingToEnemy(element: Unit, dt: number): void {
@@ -172,7 +152,7 @@ function handleAttack(element: Unit, dt: number) {
 
 	if (enemy) {
 		if (element.elapsedAttackTime < element.attackSpeed) {
-			element.elapsedAttackTime = element.elapsedAttackTime + dt * 1000;
+			element.elapsedAttackTime += dt * 1000;
 		} else {
 			element.elapsedAttackTime = 0;
 			enemy.hp = enemy.hp - element.attack;

@@ -1,4 +1,4 @@
-import { gameState as gs, Unit, UnitState } from '../modules/gameState';
+import { gameState as gs, Unit, UnitState, unitTypes } from '../modules/gameState';
 
 interface action {
 	pressed: boolean;
@@ -26,13 +26,11 @@ const ANIMATION_DAMAGED = 'damaged';
 const ANIMATION_MOVING = 'moving';
 const ANIMATION_DEAD = 'dead';
 
-const units = ['infantry'] as const;
-
 const directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'] as const;
 type DIRECTIONS = (typeof directions)[number];
 const ANIMATIONS = new Map<hash, Map<DIRECTIONS, hash>>();
 
-units.forEach((unit) => {
+unitTypes.forEach((unit) => {
 	const dirs = new Map<DIRECTIONS, hash>();
 	directions.forEach((dir) => {
 		dirs.set(dir, hash(unit + '-' + dir));
@@ -46,7 +44,6 @@ export function init(this: props): void {
 	msg.post(SPRITE_ID, 'play_animation', {
 		id: ANIMATIONS.get(this.type)?.get('n'),
 	});
-	msg.post('#selection', 'disable');
 }
 
 export function final(this: props): void {}
@@ -89,7 +86,7 @@ export function on_message(
 		);
 		// pprint(["TRIGGER ", message])
 	} else if (messageId !== hash('collision_response')) {
-		// pprint([messageId]);		
+		// pprint([messageId]);
 	}
 }
 
@@ -150,16 +147,9 @@ export function on_dead(ctx: props) {
 		go.PLAYBACK_LOOP_FORWARD,
 		0.1,
 		go.EASING_INOUTQUAD,
-		5,
+		3,
 		0,
-		() => {
-			// go.delete(go.get_id());
-		},
 	);
-	// TODO timing and remove unit from
-	// timer.delay(5, false, () => {
-	// 	go.delete(go.get_id());
-	// });
 	ctx.currentAnimationProperty = 'tint.w';
 	ctx.currentAnimation = ANIMATION_DEAD;
 }

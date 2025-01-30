@@ -6,18 +6,40 @@ export enum UnitState {
 	Idle,
 }
 
+export enum ArmorType {
+	Normal,
+	NotArmored,
+	Heavy,
+}
+
+export enum AttackType {
+	Normal,
+	Magic,
+	Pierce,
+}
+
 export interface Unit {
+	hp: number;
+	armorType: ArmorType;
+	attackType: AttackType;
+	attackSpeed: number;
+	attack: number;
+
+	// State
 	id: hash;
 	state: UnitState;
 	nearEnemy: hash[];
 	inAttackRange: hash[];
 	team: number;
+	elapsedAttackTime: number;
+	dir: vmath.vector3;
+	remainingTimeToDelete: number;
 }
 
 const FINDER_HASH = hash('finder');
 const ATTACK_RANGE_HASH = hash('attack_range');
 
-const unitsTeam1: Unit[] = [];
+const units: Unit[] = [];
 
 function updateNearEnemy(
 	unitsTeam: Unit[],
@@ -26,28 +48,10 @@ function updateNearEnemy(
 	otherId?: hash,
 	ownGroup?: hash,
 ) {
-	pprint([
-		'------------ updateNearEnemy currentid ',
-		tostring(currentId),
-		isEnter,
-		' otherid ',
-		tostring(otherId),
-	]);
 	const element = unitsTeam.find((value) => value.id === currentId);
 	const otherElement = unitsTeam.find((value) => value.id === otherId);
 	const isFinder = (ownGroup && ownGroup === FINDER_HASH) === true;
 	const isAttackRange = (ownGroup && ownGroup === ATTACK_RANGE_HASH) === true;
-
-	pprint([
-		"'------------ element ",
-		element,
-		' otherId ',
-		otherId,
-		' otherElement ',
-		otherElement,
-		' isFinder ',
-		isFinder,
-	]);
 
 	if (
 		element &&
@@ -63,12 +67,17 @@ function updateNearEnemy(
 	}
 }
 
-function getUnitTeam1(): Unit[] {
-	return unitsTeam1;
+function getUnits(): Unit[] {
+	return units;
 }
 
-function addUnitToTeam1(team: Unit) {
-	unitsTeam1.push(team);
+function addUnit(team: Unit) {
+	units.push(team);
+}
+
+function removeUnit(otherId: hash) {
+	const index = units.findIndex((id) => id === otherId);
+	units.splice(index, 1);
 }
 
 function handleAddNearEnemy(isEnter: boolean, element: Unit, otherId: hash) {
@@ -95,6 +104,7 @@ function handleAddInAttackRange(
 
 export const gameState = {
 	updateNearEnemy: updateNearEnemy,
-	getUnitTeam1: getUnitTeam1,
-	addUnitToTeam1: addUnitToTeam1,
+	getUnits: getUnits,
+	addUnit: addUnit,
+	removeUnit: removeUnit,
 };

@@ -1,60 +1,53 @@
-import { Unit, UnitState, gameState as gs } from '../modules/gameState';
+import {
+	ArmorType,
+	AttackType,
+	Unit,
+	UnitState,
+	gameState as gs,
+} from '../modules/gameState';
+import { removeItemsWithName } from '../modules/utils';
 
-interface props {
-	// unitsTeam1: Unit[],
-	// unitsTeam2: Unit[],
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface props {}
 
 interface action {
 	pressed: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface message {}
+
+const BASE_TEAM_1 = vmath.vector3(100, 320, 1);
+// const BASE_TEAM_1 = vmath.vector3(0, 0, 1);
+const BASE_TEAM_2 = vmath.vector3(840, 320, 1);
 
 export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
-	const pos3 = vmath.vector3(800, 400, 1);
-	const pos4 = vmath.vector3(800, 400, 1);
-	const compare1 = vmath.vector3(0, 0, 0) === vmath.vector3(0, 0, 0);
-	pprint([pos3 - pos4, compare1, vmath.length(vmath.vector3(0, 0, 0))]);
-
 	create_units(this);
-
-	pprint([gs.getUnitTeam1()]);
 }
 
 export function update(this: props, dt: number): void {
-	gs.getUnitTeam1().forEach((element) => {
-		// pprint(['-------- inAttackRange.length: ', element.inAttackRange])
-		if (element.team === 2) {
-			element.state = UnitState.Idle;
-		} else if (element.inAttackRange.length !== 0) {
+	const units = gs.getUnits();
+	units.forEach((element) => {
+		if (element.hp <= 0) {
+			element.state = UnitState.Dead;
+		} else if (isAliveEnemyInRange(units, element.inAttackRange)) {
 			element.state = UnitState.Attack;
-		} else if (element.nearEnemy.length !== 0) {
+		} else if (isAliveEnemyInRange(units, element.nearEnemy)) {
 			element.state = UnitState.MoveToEnemy;
 		} else {
 			element.state = UnitState.MovingToEnemyBase;
 		}
-
-		pprint([
-			'- STATE - state',
-			element.state,
-			element.id,
-			element.inAttackRange.length,
-			element.inAttackRange,
-			element.nearEnemy.length,
-			element.nearEnemy,
-		]);
 
 		if (element.state === UnitState.MoveToEnemy) {
 			movingToEnemy(element, dt);
 		} else if (element.state === UnitState.MovingToEnemyBase) {
 			movingToEnemyBase(element, dt);
 		} else if (element.state === UnitState.Attack) {
-			msg.post(element.id, 'attack');
-
-			msg.post(element.nearEnemy[0], 'damaged');
+			handleAttack(element, dt);
+		} else if (element.state === UnitState.Dead) {
+			handleDead(element, dt)
 		}
 	});
 }
@@ -64,7 +57,7 @@ export function on_input(this: props, _actionId: hash, action: action): void {
 		pprint('-----------------');
 		// pprint([gs.unitsTeam1, gs.unitsTeam2]);
 		// go.delete('/instance0')
-		pprint([gs.getUnitTeam1()]);
+		pprint([gs.getUnits()]);
 	}
 }
 
@@ -78,40 +71,77 @@ export function on_message(
 }
 
 export function create_units(_ctx: props) {
-	const pos1 = vmath.vector3(100, 100, 1);
-	const pos3 = vmath.vector3(900, 400, 1);
-	const pos4 = vmath.vector3(600, 200, 1);
+	const startPositionTeam1Unit1 = BASE_TEAM_1;
+	const startPositionTeam2Unit1 = BASE_TEAM_2;
+	const startPositionTeam2Unit2 = BASE_TEAM_2;
 
-	const id1 = factory.create('/factories#unit', pos1, undefined, 'infantry');
-	const unit1 = {
+	const id1 = factory.create(
+		'/factories#unit',
+		startPositionTeam1Unit1,
+		undefined,
+		'infantry',
+	);
+	const unit1: Unit = {
 		id: id1,
 		state: UnitState.MovingToEnemyBase,
 		nearEnemy: [],
 		inAttackRange: [],
 		team: 1,
+		elapsedAttackTime: 0,
+
+		hp: 60,
+		armorType: ArmorType.Normal,
+		attackType: AttackType.Normal,
+		attackSpeed: 600,
+		attack: 11,
+		dir: vmath.vector3(0, -1, 0),
+		remainingTimeToDelete: 4,
 	};
 
-	const id2 = factory.create('/factories#unit', pos3, undefined, 'infantry');
-	const unit2 = {
+	const id2 = factory.create(
+		'/factories#unit',
+		startPositionTeam2Unit1,
+		undefined,
+		'infantry',
+	);
+	const unit2: Unit = {
 		id: id2,
 		state: UnitState.MovingToEnemyBase,
 		nearEnemy: [],
 		inAttackRange: [],
 		team: 2,
+		elapsedAttackTime: 0,
+
+		hp: 60,
+		armorType: ArmorType.Normal,
+		attackType: AttackType.Normal,
+		attackSpeed: 600,
+		attack: 12,
+		dir: vmath.vector3(0, -1, 0),
+		remainingTimeToDelete: 4,
 	};
 
-	const id4 = factory.create('/factories#unit', pos4, undefined, 'infantry');
-	const unit4 = {
-		id: id4,
-		state: UnitState.MovingToEnemyBase,
-		nearEnemy: [],
-		inAttackRange: [],
-		team: 2,
-	};
+	// const id4 = factory.create('/factories#unit', startPositionTeam2Unit2, undefined, 'infantry');
+	// const unit4: Unit = {
+	// 	id: id4,
+	// 	state: UnitState.MovingToEnemyBase,
+	// 	nearEnemy: [],
+	// 	inAttackRange: [],
+	// 	team: 2,
+	// 	elapsedAttackTime: 0,
 
-	gs.addUnitToTeam1(unit1);
-	gs.addUnitToTeam1(unit2);
-	gs.addUnitToTeam1(unit4);
+	// 	hp: 60,
+	// 	armorType: ArmorType.Normal,
+	// 	attackType: AttackType.Normal,
+	// 	attackSpeed: 600,
+	// 	attack: 10,
+	// 	dir: vmath.vector3(0, -1, 0),
+	//	remainingTimeToDelete: 4,
+	// };
+
+	gs.addUnit(unit1);
+	gs.addUnit(unit2);
+	// gs.addUnitToTeam1(unit4);
 }
 
 function movingToEnemy(element: Unit, dt: number): void {
@@ -120,7 +150,7 @@ function movingToEnemy(element: Unit, dt: number): void {
 }
 
 function movingToEnemyBase(element: Unit, dt: number): void {
-	const target = vmath.vector3(800, 400, 1);
+	const target = resolveTargetBaseCoordinate(element);
 	movingTo(element, dt, target);
 }
 
@@ -131,30 +161,56 @@ function movingTo(element: Unit, dt: number, target: vmath.vector3): void {
 		vmath.length(diffPos) !== 0 ? diffPos : vmath.vector3(0, 1, 0),
 	);
 	const newPosition = (position + dir * 40 * dt) as vmath.vector3;
-	msg.post(element.id, 'moving', { to: newPosition });
+	element.dir = dir;
 	go.set_position(newPosition, element.id);
 }
 
-function walk_path(paths: vmath.vector3[], unitId: hash) {
-	const pos = go.get_position(unitId);
-	const step = paths.pop();
-	if (step) {
-		const to = (pos + step) as vmath.vector3;
-		to.z = 1;
-		msg.post(unitId, 'moving', { to: to });
-		go.animate(
-			unitId,
-			'position',
-			go.PLAYBACK_ONCE_FORWARD,
-			to,
-			go.EASING_LINEAR,
-			1 / 20,
-			0,
-			() => {
-				walk_path(paths, unitId);
-			},
+function handleAttack(element: Unit, dt: number) {
+	const enemy = gs
+		.getUnits()
+		.find((value) => value.id === element.nearEnemy[0]);
+
+	if (enemy) {
+		if (element.elapsedAttackTime < element.attackSpeed) {
+			element.elapsedAttackTime = element.elapsedAttackTime + dt * 1000;
+		} else {
+			element.elapsedAttackTime = 0;
+			enemy.hp = enemy.hp - element.attack;
+		}
+	}
+}
+
+function isAliveEnemyInRange(units: Unit[], inRange: hash[]): boolean {
+	if (inRange.length === 0) {
+		return false;
+	}
+
+	return inRange.some((nearId) => {
+		return (
+			units.find(
+				(unit) => unit.id === nearId && unit.state !== UnitState.Dead,
+			) !== undefined
 		);
+	});
+}
+
+function resolveTargetBaseCoordinate(element: Unit): vmath.vector3 {
+	return element.team === 1 ? BASE_TEAM_2 : BASE_TEAM_1;
+}
+
+function handleDead(element: Unit, dt: number) {
+	const isExist = element === null || go.exists(element.id) as boolean
+	if (!isExist) {
+		return
+	}
+	if (element.remainingTimeToDelete <= 0) {
+		go.delete(element.id)
+		gs.getUnits().forEach((unit)=> {
+			removeItemsWithName(unit.nearEnemy, element.id)
+			removeItemsWithName(unit.inAttackRange, element.id)
+		})
+		gs.removeUnit(element.id)
 	} else {
-		msg.post(unitId, 'damaged');
+		element.remainingTimeToDelete -= dt
 	}
 }

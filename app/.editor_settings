@@ -50,10 +50,6 @@
         :cljfx-form-view
       ]
       [
-        "/main/sprites.atlas"
-        :scene
-      ]
-      [
         "/collections/unit/unit.go"
         :scene
       ]
@@ -63,10 +59,6 @@
       ]
       [
         "/main/map.tilemap"
-        :scene
-      ]
-      [
-        "/main/main.collection"
         :scene
       ]
       [
@@ -80,6 +72,14 @@
       [
         "/scripts/game.script"
         :code
+      ]
+      [
+        "/main/sprites.atlas"
+        :scene
+      ]
+      [
+        "/main/main.collection"
+        :scene
       ]
     ]
   }

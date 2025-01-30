@@ -5,7 +5,6 @@ import {
 	UnitState,
 	gameState as gs,
 } from '../modules/gameState';
-import { removeItemsWithName } from '../modules/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface props {}
@@ -29,34 +28,35 @@ export function init(this: props): void {
 
 export function update(this: props, dt: number): void {
 	const units = gs.getUnits();
-	units.forEach((element) => {
-		if (element.hp <= 0) {
-			element.state = UnitState.Dead;
-		} else if (isAliveEnemyInRange(units, element.inAttackRange)) {
-			element.state = UnitState.Attack;
-		} else if (isAliveEnemyInRange(units, element.nearEnemy)) {
-			element.state = UnitState.MoveToEnemy;
+
+	for (let i = 0; i < units.length; i++) {
+		const unit = units[i];
+
+		if (unit.hp <= 0) {
+			unit.state = UnitState.Dead;
+		} else if (isAliveEnemyInRange(units, unit.inAttackRange)) {
+			unit.state = UnitState.Attack;
+		} else if (isAliveEnemyInRange(units, unit.nearEnemy)) {
+			unit.state = UnitState.MoveToEnemy;
 		} else {
-			element.state = UnitState.MovingToEnemyBase;
+			unit.state = UnitState.MovingToEnemyBase;
 		}
 
-		if (element.state === UnitState.MoveToEnemy) {
-			movingToEnemy(element, dt);
-		} else if (element.state === UnitState.MovingToEnemyBase) {
-			movingToEnemyBase(element, dt);
-		} else if (element.state === UnitState.Attack) {
-			handleAttack(element, dt);
-		} else if (element.state === UnitState.Dead) {
-			handleDead(element, dt)
+		if (unit.state === UnitState.MoveToEnemy) {
+			movingToEnemy(unit, dt);
+		} else if (unit.state === UnitState.MovingToEnemyBase) {
+			movingToEnemyBase(unit, dt);
+		} else if (unit.state === UnitState.Attack) {
+			handleAttack(unit, dt);
+		} else if (unit.state === UnitState.Dead) {
+			handleDead(unit, dt);
 		}
-	});
+	}
 }
 
 export function on_input(this: props, _actionId: hash, action: action): void {
 	if (_actionId === hash('touch') && action.pressed) {
-		pprint('-----------------');
-		// pprint([gs.unitsTeam1, gs.unitsTeam2]);
-		// go.delete('/instance0')
+		pprint('----------------- touch -----------------');
 		pprint([gs.getUnits()]);
 	}
 }
@@ -199,18 +199,14 @@ function resolveTargetBaseCoordinate(element: Unit): vmath.vector3 {
 }
 
 function handleDead(element: Unit, dt: number) {
-	const isExist = element === null || go.exists(element.id) as boolean
+	const isExist = element === null || (go.exists(element.id) as boolean);
 	if (!isExist) {
-		return
+		return;
 	}
 	if (element.remainingTimeToDelete <= 0) {
-		go.delete(element.id)
-		gs.getUnits().forEach((unit)=> {
-			removeItemsWithName(unit.nearEnemy, element.id)
-			removeItemsWithName(unit.inAttackRange, element.id)
-		})
-		gs.removeUnit(element.id)
+		go.delete(element.id);
+		gs.removeUnit(element.id);
 	} else {
-		element.remainingTimeToDelete -= dt
+		element.remainingTimeToDelete -= dt;
 	}
 }

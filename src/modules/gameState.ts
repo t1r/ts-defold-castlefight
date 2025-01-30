@@ -1,3 +1,5 @@
+import { removeItemsWithName } from './utils';
+
 export enum UnitState {
 	MovingToEnemyBase,
 	MoveToEnemy,
@@ -76,8 +78,14 @@ function addUnit(team: Unit) {
 }
 
 function removeUnit(otherId: hash) {
-	const index = units.findIndex((id) => id === otherId);
-	units.splice(index, 1);
+	for (let i = 0; i < units.length; i++) {
+		const unit = units[i];
+		removeItemsWithName(unit.nearEnemy, otherId);
+		removeItemsWithName(unit.inAttackRange, otherId);
+		if (unit.id === otherId) {
+			units.splice(i--, 1);
+		}
+	}
 }
 
 function handleAddNearEnemy(isEnter: boolean, element: Unit, otherId: hash) {

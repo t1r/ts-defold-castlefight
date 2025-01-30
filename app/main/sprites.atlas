@@ -137,4 +137,27 @@ animations {
   fps: 6
   flip_horizontal: 1
 }
+animations {
+  id: "barracks"
+  images {
+    image: "/assets/buildings/barracks/1.png"
+  }
+  images {
+    image: "/assets/buildings/barracks/2.png"
+  }
+  images {
+    image: "/assets/buildings/barracks/3.png"
+  }
+  images {
+    image: "/assets/buildings/barracks/4.png"
+  }
+  images {
+    image: "/assets/buildings/barracks/5.png"
+  }
+  images {
+    image: "/assets/buildings/barracks/6.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 6
+}
 extrude_borders: 2

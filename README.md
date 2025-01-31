@@ -1,3 +1,29 @@
+# 🎮 Castle Fight 🏰 ⚔️ 🏰
+
+Castle Fight
+
+### 🛠 Roadmap
+
++ Different buildngs and unit types
++ Earn gold
+
+### 📋 Docs 
+
+TBD
+
+### ⚙️ Tech Stack
+
++ [Defold](https://defold.com/)
++ Lua, C++
+
+### 📸 Screenshots:
+
+![screenshot 1](docs/Screenshot1.png "Screenshot 1")
+
+### 📱 Stores
+
+TBD
+
 # Defold TypeScript Template (minimal)
 
 <a href="https://discord.gg/eukcq5m"><img alt="Chat with us!" src="https://img.shields.io/discord/766898804896038942.svg?colorB=7581dc&logo=discord&logoColor=white"></a>

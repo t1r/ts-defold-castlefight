@@ -16,7 +16,7 @@ export enum ArmorType {
 
 export enum AttackType {
 	Normal,
-	Magic,
+	Energy,
 	Pierce,
 }
 

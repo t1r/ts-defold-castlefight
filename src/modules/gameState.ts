@@ -1,3 +1,5 @@
+import { removeItemsWithName } from './utils';
+
 export enum UnitState {
 	MovingToEnemyBase,
 	MoveToEnemy,
@@ -6,18 +8,58 @@ export enum UnitState {
 	Idle,
 }
 
+export enum ArmorType {
+	Normal,
+	NotArmored,
+	Heavy,
+}
+
+export enum AttackType {
+	Normal,
+	Energy,
+	Pierce,
+}
+
+export const unitTypes = ['infantry', 'elite-soldier'] as const;
+// export type UnitType = 'infantry' | 'elite-soldier';
+export type UnitType = typeof unitTypes[number];
+
 export interface Unit {
+	hp: number;
+	armorType: ArmorType;
+	attackType: AttackType;
+	attackSpeed: number;
+	attack: number;
+
+	// State
 	id: hash;
 	state: UnitState;
 	nearEnemy: hash[];
-	inAttackRange: hash[];
+	enemyInAttackRange: hash[];
 	team: number;
+	elapsedAttackTime: number;
+	dir: vmath.vector3;
+	remainingTimeToDelete: number;
+}
+
+export interface Building {
+	hp: number;
+	armorType: ArmorType;
+	originTimeToRespawnUnit: number;
+	unitType: UnitType;
+
+	// State
+	id: hash;
+	team: number;
+	// state: BuildingState;
+	timeToRespawnUnit: number;
 }
 
 const FINDER_HASH = hash('finder');
 const ATTACK_RANGE_HASH = hash('attack_range');
 
-const unitsTeam1: Unit[] = [];
+const units: Unit[] = [];
+const buildings: Building[] = [];
 
 function updateNearEnemy(
 	unitsTeam: Unit[],
@@ -26,28 +68,10 @@ function updateNearEnemy(
 	otherId?: hash,
 	ownGroup?: hash,
 ) {
-	pprint([
-		'------------ updateNearEnemy currentid ',
-		tostring(currentId),
-		isEnter,
-		' otherid ',
-		tostring(otherId),
-	]);
 	const element = unitsTeam.find((value) => value.id === currentId);
 	const otherElement = unitsTeam.find((value) => value.id === otherId);
 	const isFinder = (ownGroup && ownGroup === FINDER_HASH) === true;
 	const isAttackRange = (ownGroup && ownGroup === ATTACK_RANGE_HASH) === true;
-
-	pprint([
-		"'------------ element ",
-		element,
-		' otherId ',
-		otherId,
-		' otherElement ',
-		otherElement,
-		' isFinder ',
-		isFinder,
-	]);
 
 	if (
 		element &&
@@ -63,12 +87,31 @@ function updateNearEnemy(
 	}
 }
 
-function getUnitTeam1(): Unit[] {
-	return unitsTeam1;
+function getUnits(): Unit[] {
+	return units;
 }
 
-function addUnitToTeam1(team: Unit) {
-	unitsTeam1.push(team);
+function addUnit(team: Unit) {
+	units.push(team);
+}
+
+function getBuildings(): Building[] {
+	return buildings;
+}
+
+function addBuilding(building: Building) {
+	buildings.push(building);
+}
+
+function removeUnit(otherId: hash) {
+	for (let i = 0; i < units.length; i++) {
+		const unit = units[i];
+		removeItemsWithName(unit.nearEnemy, otherId);
+		removeItemsWithName(unit.enemyInAttackRange, otherId);
+		if (unit.id === otherId) {
+			units.splice(i--, 1);
+		}
+	}
 }
 
 function handleAddNearEnemy(isEnter: boolean, element: Unit, otherId: hash) {
@@ -86,15 +129,19 @@ function handleAddInAttackRange(
 	otherId: hash,
 ) {
 	if (isEnter === true) {
-		element.inAttackRange.push(otherId);
+		element.enemyInAttackRange.push(otherId);
 	} else {
-		const index = element.inAttackRange.findIndex((id) => id === otherId);
-		element.inAttackRange.splice(index, 1);
+		const index = element.enemyInAttackRange.findIndex((id) => id === otherId);
+		element.enemyInAttackRange.splice(index, 1);
 	}
 }
 
 export const gameState = {
 	updateNearEnemy: updateNearEnemy,
-	getUnitTeam1: getUnitTeam1,
-	addUnitToTeam1: addUnitToTeam1,
+	getUnits: getUnits,
+	addUnit: addUnit,
+	removeUnit: removeUnit,
+
+	getBuildings: getBuildings,
+	addBuilding: addBuilding,
 };

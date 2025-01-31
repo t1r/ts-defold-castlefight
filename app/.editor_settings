@@ -26,7 +26,7 @@
     :find {
       :case-sensitive false
       :replacement "/cube#cube"
-      :term "render3d"
+      :term "roll1"
       :whole-word false
       :wrap false
     }
@@ -46,24 +46,8 @@
         :scene
       ]
       [
-        "/main/map.tilemap"
-        :scene
-      ]
-      [
         "/input/game.input_binding"
         :cljfx-form-view
-      ]
-      [
-        "/game.project"
-        :cljfx-form-view
-      ]
-      [
-        "/main/sprites.atlas"
-        :scene
-      ]
-      [
-        "/main/main.collection"
-        :scene
       ]
       [
         "/collections/unit/unit.go"
@@ -74,11 +58,27 @@
         :code
       ]
       [
-        "/scripts/game.script"
-        :code
+        "/main/map.tilemap"
+        :scene
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
+      ]
+      [
+        "/main/main.collection"
+        :scene
+      ]
+      [
+        "/main/sprites.atlas"
+        :scene
       ]
       [
         "/scripts/unit.script"
+        :code
+      ]
+      [
+        "/scripts/game.script"
         :code
       ]
     ]

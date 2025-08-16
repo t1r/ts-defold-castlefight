@@ -9,6 +9,7 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 	msg.post('#', 'use_camera_projection');
 }
+
 export function on_message(
 	this: props,
 	messageId: hash,

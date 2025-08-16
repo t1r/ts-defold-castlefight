@@ -42,36 +42,8 @@
   :workflow {
     :recent-files [
       [
-        "/main/map.tilesource"
-        :scene
-      ]
-      [
-        "/input/game.input_binding"
-        :cljfx-form-view
-      ]
-      [
-        "/collections/unit/unit.go"
-        :scene
-      ]
-      [
         "/modules/gameState.lua"
         :code
-      ]
-      [
-        "/main/map.tilemap"
-        :scene
-      ]
-      [
-        "/game.project"
-        :cljfx-form-view
-      ]
-      [
-        "/main/main.collection"
-        :scene
-      ]
-      [
-        "/main/sprites.atlas"
-        :scene
       ]
       [
         "/scripts/unit.script"
@@ -80,6 +52,34 @@
       [
         "/scripts/game.script"
         :code
+      ]
+      [
+        "/main/map.tilesource"
+        :scene
+      ]
+      [
+        "/main/sprites.atlas"
+        :scene
+      ]
+      [
+        "/main/map.tilemap"
+        :scene
+      ]
+      [
+        "/collections/unit/unit.go"
+        :scene
+      ]
+      [
+        "/input/game.input_binding"
+        :cljfx-form-view
+      ]
+      [
+        "/main/main.collection"
+        :scene
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
       ]
     ]
   }

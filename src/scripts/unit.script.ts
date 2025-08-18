@@ -1,4 +1,5 @@
-import { gameState as gs, Unit, UnitState, unitTypes } from '../modules/gameState';
+import { gameState as gs } from '../modules/gameState';
+import { Unit, UnitState, unitTypes } from '../modules/types/unit';
 
 interface action {
 	pressed: boolean;
@@ -49,7 +50,7 @@ export function init(this: props): void {
 export function final(this: props): void {}
 
 export function update(this: props, _dt: number): void {
-	const unit = gs.getUnits().find((element) => element.id === go.get_id());
+	const unit = gs.units.getAll().find((element) => element.id === go.get_id());
 	this.unitData = unit;
 
 	const state = this.unitData?.state;
@@ -77,13 +78,14 @@ export function on_message(
 ): void {
 	if (messageId === hash('trigger_response')) {
 		const currentId = go.get_id();
-		gs.updateNearEnemy(
-			gs.getUnits(),
-			currentId,
-			message.enter === true,
-			message.other_id,
-			message.own_group,
-		);
+		// TODO
+		// gs.updateNearEnemy(
+		// 	gs.units.getUnits(),
+		// 	currentId,
+		// 	message.enter === true,
+		// 	message.other_id,
+		// 	message.own_group,
+		// );
 		// pprint(["TRIGGER ", message])
 	} else if (messageId !== hash('collision_response')) {
 		// pprint([messageId]);

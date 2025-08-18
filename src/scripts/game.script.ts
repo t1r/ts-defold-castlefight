@@ -1,12 +1,7 @@
 import { createUnit } from '../modules/factory';
-import {
-	ArmorType,
-	Building,
-	Unit,
-	UnitState,
-	UnitType,
-	gameState as gs,
-} from '../modules/gameState';
+import { gameState as gs } from '../modules/gameState';
+import { Building } from '../modules/types/building';
+import { ArmorType, Unit, UnitState, UnitType } from '../modules/types/unit';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface props {}
@@ -35,7 +30,8 @@ export function update(this: props, dt: number): void {
 export function on_input(this: props, _actionId: hash, action: action): void {
 	if (_actionId === hash('touch') && action.pressed) {
 		pprint('----------------- touch -----------------');
-		pprint([gs.getUnits()]);
+		// pprint([gs.getUnits()]);
+		pprint([gs.units.getAll()]);
 	}
 }
 
@@ -48,8 +44,9 @@ export function on_message(
 	pprint([_messageId, _sender]);
 }
 
+/* - */
 function handleUpdateUnits(dt: number) {
-	const units = gs.getUnits();
+	const units = gs.units.getAll();
 
 	for (let i = 0; i < units.length; i++) {
 		const unit = units[i];
@@ -77,10 +74,10 @@ function handleUpdateUnits(dt: number) {
 }
 
 function handleUpdateBuildings(dt: number) {
-	const buildings = gs.getBuildings();
+	const buildings = gs.buildings.getAll();
 	for (let i = 0; i < buildings.length; i++) {
 		const building = buildings[i];
-		if (building.timeToRespawnUnit <= 0) {
+		if (building.timeToRespawnUnit <= 0 && !gs.units.getByTeam(building.team)) {
 			spawnUnit(building.team, building.unitType);
 			building.timeToRespawnUnit = building.originTimeToRespawnUnit;
 		} else {
@@ -99,7 +96,7 @@ function spawnBuildings() {
 		id: hash('buildingTeam1'),
 		timeToRespawnUnit: 0,
 	};
-	gs.addBuilding(building1);
+	gs.buildings.setByTeam(1, building1);
 
 	const building2: Building = {
 		hp: 500,
@@ -110,7 +107,7 @@ function spawnBuildings() {
 		id: hash('buildingTeam2'),
 		timeToRespawnUnit: 0,
 	};
-	gs.addBuilding(building2);
+	gs.buildings.setByTeam(2, building2);
 }
 
 function spawnUnit(team: number, unitType: UnitType) {
@@ -121,7 +118,7 @@ function spawnUnit(team: number, unitType: UnitType) {
 	};
 	const id = factory.create('/factories#unit', position, undefined, props);
 	const unit = createUnit(id, team, unitType);
-	gs.addUnit(unit);
+	gs.units.setByTeam(team, unit);
 }
 
 function movingToEnemy(element: Unit, dt: number): void {
@@ -146,8 +143,8 @@ function movingTo(element: Unit, dt: number, target: vmath.vector3): void {
 }
 
 function handleAttack(element: Unit, dt: number) {
-	const enemy = gs
-		.getUnits()
+	const enemy = gs.units
+		.getAll()
 		.find((value) => value.id === element.nearEnemy[0]);
 
 	if (enemy) {
@@ -185,7 +182,7 @@ function handleDead(element: Unit, dt: number) {
 	}
 	if (element.remainingTimeToDelete <= 0) {
 		go.delete(element.id);
-		gs.removeUnit(element.id);
+		gs.units.removeByHash(element.id);
 	} else {
 		element.remainingTimeToDelete -= dt;
 	}

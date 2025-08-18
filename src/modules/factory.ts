@@ -1,4 +1,4 @@
-import { Unit, UnitType } from './gameState';
+import { Unit, UnitType } from './types/unit';
 import { createEliteSoldier } from './unit/eliteSoldier';
 import { createInfantry } from './unit/infantry';
 

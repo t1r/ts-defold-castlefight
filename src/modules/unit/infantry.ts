@@ -1,4 +1,4 @@
-import { ArmorType, AttackType, Unit, UnitState } from './../gameState';
+import { ArmorType, AttackType, Unit, UnitState } from '../types/unit';
 
 export function createInfantry(unitId: hash, team: number): Unit {
 	return {

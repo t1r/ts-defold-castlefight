@@ -97,7 +97,7 @@ function spawnBuildings() {
 		id: hash('buildingTeam1'),
 		timeToRespawnUnit: 0,
 	};
-	gs.buildings.setByTeam(1, building1);
+	gs.buildings.setByTeam(TEAM_1, building1);
 
 	const building2: Building = {
 		hp: 500,
@@ -108,7 +108,7 @@ function spawnBuildings() {
 		id: hash('buildingTeam2'),
 		timeToRespawnUnit: 0,
 	};
-	gs.buildings.setByTeam(2, building2);
+	gs.buildings.setByTeam(TEAM_2, building2);
 }
 
 function spawnUnit(team: number, unitType: UnitType) {

@@ -1,3 +1,4 @@
+import { TEAM_1, TEAM_2 } from '../modules/const';
 import { createUnit } from '../modules/factory';
 import { gameState as gs } from '../modules/gameState';
 import { Building } from '../modules/types/building';
@@ -30,7 +31,6 @@ export function update(this: props, dt: number): void {
 export function on_input(this: props, _actionId: hash, action: action): void {
 	if (_actionId === hash('touch') && action.pressed) {
 		pprint('----------------- touch -----------------');
-		// pprint([gs.getUnits()]);
 		pprint([gs.units.getAll()]);
 	}
 }
@@ -44,8 +44,9 @@ export function on_message(
 	pprint([_messageId, _sender]);
 }
 
-/* - */
+/* TODO move to module */
 function handleUpdateUnits(dt: number) {
+	gs.units.updateInRange((id) => go.get_position(id));
 	const units = gs.units.getAll();
 
 	for (let i = 0; i < units.length; i++) {
@@ -92,7 +93,7 @@ function spawnBuildings() {
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
 		unitType: 'infantry',
-		team: 1,
+		team: TEAM_1,
 		id: hash('buildingTeam1'),
 		timeToRespawnUnit: 0,
 	};
@@ -103,7 +104,7 @@ function spawnBuildings() {
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
 		unitType: 'elite-soldier',
-		team: 2,
+		team: TEAM_2,
 		id: hash('buildingTeam2'),
 		timeToRespawnUnit: 0,
 	};
@@ -145,7 +146,7 @@ function movingTo(element: Unit, dt: number, target: vmath.vector3): void {
 function handleAttack(element: Unit, dt: number) {
 	const enemy = gs.units
 		.getAll()
-		.find((value) => value.id === element.nearEnemy[0]);
+		.find((value) => value.id === element.enemyInAttackRange[0]);
 
 	if (enemy) {
 		if (element.elapsedAttackTime < element.attackSpeed) {

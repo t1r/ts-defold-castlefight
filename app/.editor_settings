@@ -74,11 +74,11 @@
         :cljfx-form-view
       ]
       [
-        "/collections/unit/unit.go"
+        "/main/main.collection"
         :scene
       ]
       [
-        "/main/main.collection"
+        "/collections/unit/unit.go"
         :scene
       ]
     ]

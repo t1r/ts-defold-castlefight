@@ -72,24 +72,24 @@ export function on_input(this: props, _actionId: hash, _action: action): void {}
 
 export function on_message(
 	this: props,
-	messageId: hash,
-	message: message,
+	_messageId: hash,
+	_message: message,
 	_sender: url,
 ): void {
-	if (messageId === hash('trigger_response')) {
-		const currentId = go.get_id();
-		// TODO
-		// gs.updateNearEnemy(
-		// 	gs.units.getUnits(),
-		// 	currentId,
-		// 	message.enter === true,
-		// 	message.other_id,
-		// 	message.own_group,
-		// );
-		// pprint(["TRIGGER ", message])
-	} else if (messageId !== hash('collision_response')) {
-		// pprint([messageId]);
-	}
+	// if (messageId === hash('trigger_response')) {
+	// 	const currentId = go.get_id();
+	// 	// TODO
+	// 	gs.updateNearEnemy(
+	// 		gs.units.getUnits(),
+	// 		currentId,
+	// 		message.enter === true,
+	// 		message.other_id,
+	// 		message.own_group,
+	// 	);
+	// 	// pprint(["TRIGGER ", message])
+	// } else if (messageId !== hash('collision_response')) {
+	// 	// pprint([messageId]);
+	// }
 }
 
 export function on_attack(ctx: props) {

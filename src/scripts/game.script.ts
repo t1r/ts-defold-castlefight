@@ -29,12 +29,15 @@ export function update(this: props, dt: number): void {
 	handleUpdateBuildings(dt);
 }
 
-export function on_input(this: props, _actionId: hash, action: action): void {
-	if (_actionId === hash('touch') && action.pressed) {
+export function on_input(this: props, actionId: hash, action: action): void {
+	if (actionId === hash('touch') && action.pressed) {
 		pprint('----------------- touch -----------------');
 		pprint([
 			gs.units.getAll().map((e) => ({ unit: e, pos: go.get_position(e.id) })),
 		]);
+	} else if (actionId === hash('upgrade') && action.pressed) {
+		pprint('----------------- upgrade -----------------');
+		
 	}
 }
 

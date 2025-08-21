@@ -66,16 +66,16 @@
         :scene
       ]
       [
-        "/input/game.input_binding"
-        :cljfx-form-view
+        "/collections/unit/unit.go"
+        :scene
       ]
       [
         "/game.project"
         :cljfx-form-view
       ]
       [
-        "/collections/unit/unit.go"
-        :scene
+        "/input/game.input_binding"
+        :cljfx-form-view
       ]
       [
         "/main/main.collection"

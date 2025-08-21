@@ -1,6 +1,7 @@
 import { TEAM_1, TEAM_2 } from '../modules/const';
 import { createUnit } from '../modules/factory';
 import { gameState as gs } from '../modules/gameState';
+import { getDamageMultiplier } from '../modules/logic/damage';
 import { Building } from '../modules/types/building';
 import { ArmorType, Unit, UnitState, UnitType } from '../modules/types/unit';
 
@@ -31,7 +32,9 @@ export function update(this: props, dt: number): void {
 export function on_input(this: props, _actionId: hash, action: action): void {
 	if (_actionId === hash('touch') && action.pressed) {
 		pprint('----------------- touch -----------------');
-		pprint([gs.units.getAll()]);
+		pprint([
+			gs.units.getAll().map((e) => ({ unit: e, pos: go.get_position(e.id) })),
+		]);
 	}
 }
 
@@ -153,7 +156,10 @@ function handleAttack(element: Unit, dt: number) {
 			element.elapsedAttackTime += dt * 1000;
 		} else {
 			element.elapsedAttackTime = 0;
-			enemy.hp = enemy.hp - element.attack;
+			enemy.hp =
+				enemy.hp -
+				element.attack *
+					getDamageMultiplier(enemy.armorType, element.attackType);
 		}
 	}
 }

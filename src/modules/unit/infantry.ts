@@ -10,7 +10,7 @@ export function createInfantry(unitId: hash, team: number): Unit {
 		elapsedAttackTime: 0,
 
 		hp: 60,
-		armorType: ArmorType.Normal,
+		armorType: ArmorType.Medium,
 		attackType: AttackType.Normal,
 		attackSpeed: 600,
 		attack: 10,

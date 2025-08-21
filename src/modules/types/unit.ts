@@ -7,20 +7,27 @@ export enum UnitState {
 }
 
 export enum ArmorType {
-	Normal,
-	NotArmored,
+	Unarmored,
+	Light,
+	Medium,
 	Heavy,
+	Fortified,
+	Hero,
 }
 
 export enum AttackType {
 	Normal,
-	Energy,
-	Pierce,
+	Piercing,
+	Siege,
+	Magic,
+	Chaos,
+	Spells,
+	Hero,
 }
 
 export const unitTypes = ['infantry', 'elite-soldier'] as const;
 // export type UnitType = 'infantry' | 'elite-soldier';
-export type UnitType = typeof unitTypes[number];
+export type UnitType = (typeof unitTypes)[number];
 
 export interface Unit {
 	hp: number;

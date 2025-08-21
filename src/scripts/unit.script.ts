@@ -64,8 +64,6 @@ export function update(this: props, _dt: number): void {
 	) {
 		on_moving(this, unit);
 	}
-	// TODO damaged
-	// on_damaged(this);
 }
 
 export function on_input(this: props, _actionId: hash, _action: action): void {}
@@ -76,20 +74,6 @@ export function on_message(
 	_message: message,
 	_sender: url,
 ): void {
-	// if (messageId === hash('trigger_response')) {
-	// 	const currentId = go.get_id();
-	// 	// TODO
-	// 	gs.updateNearEnemy(
-	// 		gs.units.getUnits(),
-	// 		currentId,
-	// 		message.enter === true,
-	// 		message.other_id,
-	// 		message.own_group,
-	// 	);
-	// 	// pprint(["TRIGGER ", message])
-	// } else if (messageId !== hash('collision_response')) {
-	// 	// pprint([messageId]);
-	// }
 }
 
 export function on_attack(ctx: props) {
@@ -97,15 +81,6 @@ export function on_attack(ctx: props) {
 		return;
 	}
 	resetAnimation();
-
-	// go.animate(
-	// 	SPRITE_ID,
-	// 	'tint.w',
-	// 	go.PLAYBACK_LOOP_PINGPONG,
-	// 	0,
-	// 	go.EASING_INOUTQUAD,
-	// 	3,
-	// );
 
 	go.animate(
 		SPRITE_ID,

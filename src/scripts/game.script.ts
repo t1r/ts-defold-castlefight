@@ -22,6 +22,7 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
 	spawnBuildings();
+	msg.post('/dumb', 'disable');
 }
 
 export function update(this: props, dt: number): void {
@@ -37,7 +38,7 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		]);
 	} else if (actionId === hash('upgrade') && action.pressed) {
 		pprint('----------------- upgrade -----------------');
-		
+		msg.post('/dumb', 'enable');
 	}
 }
 
@@ -51,6 +52,10 @@ export function on_message(
 }
 
 /* TODO move to module */
+// function foobar() {
+// 	// TODO show menu
+// }
+
 function handleUpdateUnits(dt: number) {
 	gs.units.updateInRange((id) => go.get_position(id));
 	const units = gs.units.getAll();

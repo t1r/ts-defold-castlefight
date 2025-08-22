@@ -13,7 +13,7 @@ embedded_components {
   "}\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/sprites.atlas\"\n"
+  "  texture: \"/collections/level/main/sprites.atlas\"\n"
   "}\n"
   ""
 }

@@ -1,3 +1,4 @@
+import * as monarch from 'monarch.monarch';
 import { TEAM_1, TEAM_2 } from '../modules/const';
 import { createUnit } from '../modules/factory';
 import { gameState as gs } from '../modules/gameState';
@@ -38,7 +39,9 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		]);
 	} else if (actionId === hash('upgrade') && action.pressed) {
 		pprint('----------------- upgrade -----------------');
-		msg.post('/dumb', 'enable');
+		// TODO
+		// msg.post('/dumb', 'enable');
+		monarch.show(hash('upgrade'));
 	}
 }
 

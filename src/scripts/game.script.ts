@@ -1,10 +1,9 @@
 import * as monarch from 'monarch.monarch';
 import { TEAM_1, TEAM_2 } from '../modules/const';
-import { createUnit } from '../modules/factory';
 import { gameState as gs } from '../modules/gameState';
 import { getDamageMultiplier } from '../modules/logic/damage';
 import { Building } from '../modules/types/building';
-import { ArmorType, Unit, UnitState, UnitType } from '../modules/types/unit';
+import { ArmorType, Unit, UnitState } from '../modules/types/unit';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface props {}
@@ -23,10 +22,11 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
 	spawnBuildings();
-	msg.post('/dumb', 'disable');
+	// msg.post('/dumb', 'disable');
 }
 
 export function update(this: props, dt: number): void {
+	// pprint(["update", dt])
 	handleUpdateUnits(dt);
 	handleUpdateBuildings(dt);
 }
@@ -54,11 +54,7 @@ export function on_message(
 	pprint([_messageId, _sender]);
 }
 
-/* TODO move to module */
-// function foobar() {
-// 	// TODO show menu
-// }
-
+/* -------------- TODO move to module --------------- */
 function handleUpdateUnits(dt: number) {
 	gs.units.updateInRange((id) => go.get_position(id));
 	const units = gs.units.getAll();
@@ -93,7 +89,7 @@ function handleUpdateBuildings(dt: number) {
 	for (let i = 0; i < buildings.length; i++) {
 		const building = buildings[i];
 		if (building.timeToRespawnUnit <= 0 && !gs.units.getByTeam(building.team)) {
-			spawnUnit(building.team, building.unitType);
+			spawnUnit(building.team);
 			building.timeToRespawnUnit = building.originTimeToRespawnUnit;
 		} else {
 			building.timeToRespawnUnit -= dt;
@@ -106,7 +102,6 @@ function spawnBuildings() {
 		hp: 500,
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
-		unitType: 'infantry',
 		team: TEAM_1,
 		id: hash('buildingTeam1'),
 		timeToRespawnUnit: 0,
@@ -117,7 +112,6 @@ function spawnBuildings() {
 		hp: 500,
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
-		unitType: 'elite-soldier',
 		team: TEAM_2,
 		id: hash('buildingTeam2'),
 		timeToRespawnUnit: 0,
@@ -125,14 +119,20 @@ function spawnBuildings() {
 	gs.buildings.setByTeam(TEAM_2, building2);
 }
 
-function spawnUnit(team: number, unitType: UnitType) {
-	const position = team === 1 ? BASE_TEAM_1 : BASE_TEAM_2;
+function spawnUnit(team: number) {
+	const position = team === TEAM_1 ? BASE_TEAM_1 : BASE_TEAM_2;
+	const unitFactory = gs.progress.getByTeam(team)?.factory;
+	if (!unitFactory) {
+		return;
+	}
+
+	const template = unitFactory.createUnitTemplate();
 
 	const props = {
-		type: hash(unitType),
+		type: hash(template.unitType),
 	};
 	const id = factory.create('/factories#unit', position, undefined, props);
-	const unit = createUnit(id, team, unitType);
+	const unit = unitFactory.createUnit(id, team, template);
 	gs.units.setByTeam(team, unit);
 }
 

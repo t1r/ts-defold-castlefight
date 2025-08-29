@@ -1,7 +1,7 @@
 import { Building } from '../types/building';
 
 export class GsBuilding {
-	units: Map<number, Building> = new Map();
+	private units: Map<number, Building> = new Map();
 
 	public getByTeam(team: number): Building | undefined {
 		return this.units.get(team);

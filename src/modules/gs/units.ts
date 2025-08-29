@@ -3,7 +3,7 @@ import { Unit } from '../types/unit';
 import { removeItemsWithName } from '../utils';
 
 export class GsUnits {
-	units: Map<number, Unit> = new Map();
+	private units: Map<number, Unit> = new Map();
 
 	public getByTeam(team: number): Unit | undefined {
 		return this.units.get(team);

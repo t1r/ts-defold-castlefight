@@ -28,14 +28,16 @@ export enum AttackType {
 export const unitTypes = ['infantry', 'elite-soldier'] as const;
 export type UnitType = (typeof unitTypes)[number];
 
-export interface Unit {
+export interface UnitTemplate {
 	hp: number;
-	armorType: ArmorType;
-	attackType: AttackType;
-	attackSpeed: number;
-	attack: number;
+	readonly armorType: ArmorType;
+	readonly attackType: AttackType;
+	readonly attackSpeed: number;
+	readonly attack: number;
+	readonly unitType: UnitType;
+}
 
-	// State
+export interface UnitCharacteristics {
 	id: hash;
 	state: UnitState;
 	nearEnemy: hash[];
@@ -44,4 +46,11 @@ export interface Unit {
 	elapsedAttackTime: number;
 	dir: vmath.vector3;
 	remainingTimeToDelete: number;
+}
+
+export interface Unit extends UnitTemplate, UnitCharacteristics {}
+
+export interface UnitAbstractFactory {
+	createUnit(uid: hash, team: number, template: UnitTemplate): Unit;
+	createUnitTemplate(): UnitTemplate;
 }

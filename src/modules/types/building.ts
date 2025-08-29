@@ -1,10 +1,10 @@
-import { ArmorType, UnitType } from './unit';
+import { ArmorType } from './unit';
 
 export interface Building {
 	hp: number;
 	armorType: ArmorType;
 	originTimeToRespawnUnit: number;
-	unitType: UnitType;
+	// unitType: UnitType;
 
 	// State
 	id: hash;

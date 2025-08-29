@@ -46,20 +46,8 @@
         :code
       ]
       [
-        "/scripts/unit.script"
-        :code
-      ]
-      [
         "/scripts/game.script"
         :code
-      ]
-      [
-        "/input/game.input_binding"
-        :cljfx-form-view
-      ]
-      [
-        "/collections/unit/unit.go"
-        :scene
       ]
       [
         "/main/map.tilemap"
@@ -82,12 +70,28 @@
         :scene
       ]
       [
-        "/controller/controller.collection"
+        "/game.project"
+        :cljfx-form-view
+      ]
+      [
+        "/collections/unit/unit.go"
         :scene
       ]
       [
-        "/game.project"
+        "/scripts/unit.script"
+        :code
+      ]
+      [
+        "/input/game.input_binding"
         :cljfx-form-view
+      ]
+      [
+        "/collections/level/main/main.collection"
+        :scene
+      ]
+      [
+        "/controller/controller.collection"
+        :scene
       ]
     ]
   }

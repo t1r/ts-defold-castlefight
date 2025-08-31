@@ -1,5 +1,6 @@
 import * as monarch from 'monarch.monarch';
 import { gameState as gs } from '../modules/gameState';
+import { START_GAME_HASH } from '../modules/const';
 
 interface props {
 	isPaused: boolean;
@@ -39,10 +40,12 @@ export function on_message(
 	_sender: url,
 ): void {
 	if (messageId === hash('start')) {
+		monarch.show(hash('main_menu'));
+	} else if (messageId === START_GAME_HASH) {
 		monarch.show(hash('game'));
 	}
 	// go.get
-	pprint(["msg id", messageId])
+	pprint(['msg id', messageId]);
 }
 
 function handlePauseGame(ctx: props) {

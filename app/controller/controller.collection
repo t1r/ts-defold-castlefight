@@ -51,3 +51,22 @@ embedded_instances {
   "}\n"
   ""
 }
+embedded_instances {
+  id: "main_menu"
+  data: "components {\n"
+  "  id: \"screen_proxy\"\n"
+  "  component: \"/monarch/screen_proxy.script\"\n"
+  "  properties {\n"
+  "    id: \"screen_id\"\n"
+  "    value: \"main_menu\"\n"
+  "    type: PROPERTY_TYPE_HASH\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"collectionproxy\"\n"
+  "  type: \"collectionproxy\"\n"
+  "  data: \"collection: \\\"/collections/level/main_menu/main_menu.collection\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

@@ -2,5 +2,9 @@ name: "main_menu"
 scale_along_z: 0
 embedded_instances {
   id: "go"
-  data: ""
+  data: "components {\n"
+  "  id: \"main_menu\"\n"
+  "  component: \"/collections/level/main_menu/main_menu.gui\"\n"
+  "}\n"
+  ""
 }

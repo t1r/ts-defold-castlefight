@@ -86,16 +86,12 @@
         :code
       ]
       [
-        "/controller/controller.collection"
-        :scene
-      ]
-      [
         "/collections/level/upgrade/upgrade.collection"
         :scene
       ]
       [
-        "/collections/level/main_menu/main_menu.collection"
-        :scene
+        "/game.project"
+        :cljfx-form-view
       ]
       [
         "/collections/level/upgrade/upgrade.gui"
@@ -106,8 +102,12 @@
         :scene
       ]
       [
-        "/game.project"
-        :cljfx-form-view
+        "/controller/controller.collection"
+        :scene
+      ]
+      [
+        "/collections/level/main_menu/main_menu.collection"
+        :scene
       ]
     ]
   }

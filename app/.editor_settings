@@ -106,7 +106,7 @@
         :scene
       ]
       [
-        "/collections/level/start_game/start_game.gui"
+        "/controller/controller.collection"
         :scene
       ]
       [
@@ -114,7 +114,7 @@
         :scene
       ]
       [
-        "/controller/controller.collection"
+        "/collections/level/start_game/start_game.gui"
         :scene
       ]
     ]

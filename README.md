@@ -84,3 +84,9 @@ code .
 <p align="center" class="h4">
   TypeScript :heart: Defold
 </p>
+
+6. Generate
+
+```bash
+npm run resolve # fetch deps
+```

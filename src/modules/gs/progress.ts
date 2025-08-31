@@ -12,4 +12,8 @@ export class GsProgress {
 	public getByTeam(team: number): Progress | undefined {
 		return this.list.get(team);
 	}
+
+	public isAllFactoriesReady(): boolean {
+		return Array.from(this.list.values()).every((e) => e.factory);
+	}
 }

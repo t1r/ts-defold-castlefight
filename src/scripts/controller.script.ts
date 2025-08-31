@@ -1,7 +1,8 @@
 import * as monarch from 'monarch.monarch';
+import { gameState as gs } from '../modules/gameState';
 
 interface props {
-	isPaused: boolean
+	isPaused: boolean;
 }
 
 interface action {
@@ -14,18 +15,22 @@ interface message {}
 export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 	msg.post('#', 'start');
-	this.isPaused = false
+	this.isPaused = false;
+
+	handlePauseGame(this);
 }
 
-export function update(this: props, _dt: number): void {
-}
+export function update(this: props, _dt: number): void {}
 
-export function on_input(this: props, _actionId: hash, _action: action): void {
-	if (_actionId === hash('pause') && _action.pressed) {
+export function on_input(this: props, actionId: hash, action: action): void {
+	if (actionId === hash('pause') && action.pressed) {
 		pprint('----------------- pause -----------------');
-		msg.post('/game#collectionproxy', 'set_time_step', { factor: this.isPaused ? 1 : 0, mode: 0 });
-		this.isPaused = !this.isPaused
-	}}
+		handlePauseGame(this);
+	} else if (actionId === hash('upgrade') && action.pressed) {
+		pprint('----------------- upgrade -----------------');
+		monarch.show(hash('upgrade'));
+	}
+}
 
 export function on_message(
 	this: props,
@@ -36,4 +41,16 @@ export function on_message(
 	if (messageId === hash('start')) {
 		monarch.show(hash('game'));
 	}
+	// go.get
+	pprint(["msg id", messageId])
+}
+
+function handlePauseGame(ctx: props) {
+	if (!gs.progress.isAllFactoriesReady()) {
+		ctx.isPaused = false;
+	}
+	msg.post('/game#collectionproxy', 'set_time_step', {
+		factor: ctx.isPaused ? 1 : 0,
+		mode: 0,
+	});
 }

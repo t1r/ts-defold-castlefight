@@ -37,12 +37,13 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		pprint([
 			gs.units.getAll().map((e) => ({ unit: e, pos: go.get_position(e.id) })),
 		]);
-	} else if (actionId === hash('upgrade') && action.pressed) {
-		pprint('----------------- upgrade -----------------');
-		// TODO
-		// msg.post('/dumb', 'enable');
-		monarch.show(hash('upgrade'));
-	}
+	} 
+	// else if (actionId === hash('upgrade') && action.pressed) {
+	// 	pprint('----------------- upgrade -----------------');
+	// 	// TODO
+	// 	// msg.post('/dumb', 'enable');
+	// 	monarch.show(hash('upgrade'));
+	// }
 }
 
 export function on_message(

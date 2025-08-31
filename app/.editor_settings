@@ -66,14 +66,6 @@
         :scene
       ]
       [
-        "/collections/level/upgrade/upgrade.collection"
-        :scene
-      ]
-      [
-        "/game.project"
-        :cljfx-form-view
-      ]
-      [
         "/collections/unit/unit.go"
         :scene
       ]
@@ -90,8 +82,32 @@
         :scene
       ]
       [
+        "/scripts/controller.script"
+        :code
+      ]
+      [
         "/controller/controller.collection"
         :scene
+      ]
+      [
+        "/collections/level/upgrade/upgrade.collection"
+        :scene
+      ]
+      [
+        "/collections/level/main_menu/main_menu.collection"
+        :scene
+      ]
+      [
+        "/collections/level/upgrade/upgrade.gui"
+        :scene
+      ]
+      [
+        "/collections/level/main_menu/main_menu.gui"
+        :scene
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
       ]
     ]
   }

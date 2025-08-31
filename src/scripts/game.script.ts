@@ -1,5 +1,5 @@
-// import * as monarch from 'monarch.monarch';
-import { TEAM_1, TEAM_2 } from '../modules/const';
+import * as monarch from 'monarch.monarch';
+import { NAV_PRE_START_GAME, TEAM_1, TEAM_2 } from '../modules/const';
 import { gameState as gs } from '../modules/gameState';
 import { getDamageMultiplier } from '../modules/logic/damage';
 import { Building } from '../modules/types/building';
@@ -23,6 +23,8 @@ export function init(this: props): void {
 
 	spawnBuildings();
 	// msg.post('/dumb', 'disable');
+
+	monarch.show(NAV_PRE_START_GAME);
 }
 
 export function update(this: props, dt: number): void {

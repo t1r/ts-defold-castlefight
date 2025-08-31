@@ -98,15 +98,23 @@
         :scene
       ]
       [
+        "/collections/level/main_menu/main_menu.collection"
+        :scene
+      ]
+      [
         "/collections/level/main_menu/main_menu.gui"
         :scene
       ]
       [
-        "/controller/controller.collection"
+        "/collections/level/start_game/start_game.gui"
         :scene
       ]
       [
-        "/collections/level/main_menu/main_menu.collection"
+        "/collections/level/start_game/start_game.collection"
+        :scene
+      ]
+      [
+        "/controller/controller.collection"
         :scene
       ]
     ]

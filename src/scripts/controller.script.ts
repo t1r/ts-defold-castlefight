@@ -1,6 +1,11 @@
 import * as monarch from 'monarch.monarch';
 import { gameState as gs } from '../modules/gameState';
-import { START_GAME_HASH } from '../modules/const';
+import {
+	NAV_GAME,
+	NAV_MAIN_MENU,
+	NAV_UPGRADE,
+	START_GAME_MSG,
+} from '../modules/const';
 
 interface props {
 	isPaused: boolean;
@@ -29,7 +34,7 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		handlePauseGame(this);
 	} else if (actionId === hash('upgrade') && action.pressed) {
 		pprint('----------------- upgrade -----------------');
-		monarch.show(hash('upgrade'));
+		monarch.show(NAV_UPGRADE);
 	}
 }
 
@@ -40,12 +45,10 @@ export function on_message(
 	_sender: url,
 ): void {
 	if (messageId === hash('start')) {
-		monarch.show(hash('main_menu'));
-	} else if (messageId === START_GAME_HASH) {
-		monarch.show(hash('game'));
+		monarch.show(NAV_MAIN_MENU);
+	} else if (messageId === START_GAME_MSG) {
+		monarch.show(NAV_GAME);
 	}
-	// go.get
-	pprint(['msg id', messageId]);
 }
 
 function handlePauseGame(ctx: props) {

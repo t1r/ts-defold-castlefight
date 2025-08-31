@@ -1,4 +1,4 @@
-import { START_GAME_HASH } from '../modules/const';
+import { START_GAME_MSG } from '../modules/const';
 
 interface props {
 	buttonStart: node;
@@ -30,8 +30,7 @@ export function on_message(
 export function on_input(this: props, actionId: hash, action: action): void {
 	if (actionId === hash('touch') && action.released) {
 		if (gui.pick_node(this.buttonStart, action.x, action.y)) {
-			// pprint(['start']);
-			msg.post('controller:/controller#controller', START_GAME_HASH);
+			msg.post('controller:/controller#controller', START_GAME_MSG);
 		} else if (gui.pick_node(this.buttonSettings, action.x, action.y)) {
 			pprint(['TODO settings']);
 		} else if (gui.pick_node(this.buttonExit, action.x, action.y)) {

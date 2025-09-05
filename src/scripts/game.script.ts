@@ -22,12 +22,15 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
 	spawnBuildings();
-	// msg.post('/dumb', 'disable');
 
 	monarch.show(NAV_PRE_START_GAME);
 }
 
 export function update(this: props, dt: number): void {
+	// TODO mb revork
+	if (!gs.progress.isAllFactoriesReady()){
+		return
+	}
 	// pprint(["update", dt])
 	handleUpdateUnits(dt);
 	handleUpdateBuildings(dt);

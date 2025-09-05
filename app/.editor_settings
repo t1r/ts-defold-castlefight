@@ -102,10 +102,6 @@
         :scene
       ]
       [
-        "/collections/level/main_menu/main_menu.gui"
-        :scene
-      ]
-      [
         "/controller/controller.collection"
         :scene
       ]
@@ -115,6 +111,22 @@
       ]
       [
         "/collections/level/start_game/start_game.gui"
+        :scene
+      ]
+      [
+        "/collections/level/pre_start_game/pre_start_game.collection"
+        :scene
+      ]
+      [
+        "/collections/level/pre_start_game/pre_start_game.gui"
+        :scene
+      ]
+      [
+        "/scripts/pre_start_game.gui_script"
+        :code
+      ]
+      [
+        "/collections/level/main_menu/main_menu.gui"
         :scene
       ]
     ]

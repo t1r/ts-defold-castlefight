@@ -3,6 +3,7 @@ import { gameState as gs } from '../modules/gameState';
 import {
 	NAV_GAME,
 	NAV_MAIN_MENU,
+	NAV_PRE_START_GAME,
 	NAV_UPGRADE,
 	START_GAME_MSG,
 } from '../modules/const';
@@ -48,6 +49,9 @@ export function on_message(
 		monarch.show(NAV_MAIN_MENU);
 	} else if (messageId === START_GAME_MSG) {
 		monarch.show(NAV_GAME);
+	} else if (messageId === hash('close_pre_start_game')) {
+		pprint(["CLOSE PRE START"])
+		monarch.hide(NAV_PRE_START_GAME);
 	}
 }
 

@@ -6,95 +6,23 @@ fonts {
 nodes {
   position {
     x: 470.0
-    y: 450.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.102
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "start"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_TEXT
-  text: "Start"
-  font: "default"
-  id: "text"
-  parent: "start"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 470.0
     y: 340.0
+    z: -1.0
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 700.0
+    y: 480.0
   }
   color {
-    x: 0.102
-    y: 0.102
-    z: 0.102
+    x: 0.502
+    y: 0.502
+    z: 0.502
   }
   type: TYPE_BOX
-  id: "settings"
+  id: "bg"
   inherit_alpha: true
+  alpha: 0.7
   size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_TEXT
-  text: "Settings"
-  font: "default"
-  id: "text1"
-  parent: "settings"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 470.0
-    y: 230.0
-  }
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  color {
-    x: 0.102
-    y: 0.102
-    z: 0.102
-  }
-  type: TYPE_BOX
-  id: "exit"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_TEXT
-  text: "Exit"
-  font: "default"
-  id: "text2"
-  parent: "exit"
-  inherit_alpha: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

@@ -1,5 +1,9 @@
 import { TEAM_1, TEAM_2 } from '../const';
+import { getProgressVariantByLevel } from '../logic/progress';
 import { Progress } from '../types/progress';
+import { UnitAbstractFactory } from '../types/unit';
+import { EliteSoldierFactory } from '../unit/eliteSoldier';
+import { InfantryFactory } from '../unit/infantry';
 
 export class GsProgress {
 	private list: Map<number, Progress> = new Map();
@@ -11,6 +15,26 @@ export class GsProgress {
 
 	public getByTeam(team: number): Progress | undefined {
 		return this.list.get(team);
+	}
+
+	// TODO del
+	public onInit() {
+		this.list.set(TEAM_1, { level: 1, factory: new InfantryFactory() });
+		this.list.set(TEAM_2, { level: 1, factory: new EliteSoldierFactory() });
+	}
+
+	public getUserUpgradeVariantsByTeam(team: number): UnitAbstractFactory[] {
+		const level = this.list.get(team)?.level;
+		return level !== undefined ? getProgressVariantByLevel(level) : [];
+	}
+
+	public setUseProgressByTeam(team: number, factory: UnitAbstractFactory) {
+		const progress = this.list.get(team);
+		if (progress === undefined) {
+			return
+		}
+		
+		this.list.set(team, { level: progress.level + 1, factory: factory });
 	}
 
 	public isAllFactoriesReady(): boolean {

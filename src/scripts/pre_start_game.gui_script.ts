@@ -93,12 +93,12 @@ function createUiRow(y: number, text: string): node {
 		vmath.vector3(470, y, 0),
 		vmath.vector3(400, 100, 0),
 	);
-	const nodeText = gui.new_text_node(vmath.vector3(470, y, 0), text);
-	// gui.set_color(nodeText, vmath.vector3(1, 1, 1))
+	const nodeText = gui.new_text_node(
+		vmath.vector3(0, 0, 0), 
+		text
+	);
 	gui.set_color(nodeBox, vmath.vector3(0.1, 0.1, 0.1));
 	gui.set_parent(nodeText, nodeBox);
-
-	gui.set_enabled(nodeText, true);
 
 	return nodeBox;
 }

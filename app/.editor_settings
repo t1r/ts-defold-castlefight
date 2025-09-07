@@ -114,10 +114,6 @@
         :scene
       ]
       [
-        "/collections/level/pre_start_game/pre_start_game.gui"
-        :scene
-      ]
-      [
         "/scripts/pre_start_game.gui_script"
         :code
       ]
@@ -128,6 +124,10 @@
       [
         "/game.project"
         :cljfx-form-view
+      ]
+      [
+        "/collections/level/pre_start_game/pre_start_game.gui"
+        :scene
       ]
     ]
   }

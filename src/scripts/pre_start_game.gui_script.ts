@@ -3,6 +3,9 @@ import { gameState as gs } from '../modules/gameState';
 import { UnitAbstractFactory, UnitTemplate } from '../modules/types/unit';
 // import * as druid from 'druid.druid';
 
+const UNIT_ROW_SIZE = 120;
+const UNIT_ROW_START_OFFSET = 160;
+
 interface props {
 	upgradeUnitList: { node: node; factory: UnitAbstractFactory }[];
 }
@@ -23,7 +26,10 @@ export function init(this: props): void {
 	for (let index = 0; index < factories.length; index++) {
 		const factory = factories[index];
 		const template = factory.createUnitTemplate();
-		const node = createUnitCard(index * 120 + 160, buildString(template));
+		const node = createUnitCard(
+			index * UNIT_ROW_SIZE + UNIT_ROW_START_OFFSET,
+			buildUnitRowString(template),
+		);
 		this.upgradeUnitList.push({
 			node: node,
 			factory: factory,
@@ -66,6 +72,6 @@ function createUnitCard(y: number, text: string): node {
 	return nodeBox;
 }
 
-function buildString(template: UnitTemplate): string {
+function buildUnitRowString(template: UnitTemplate): string {
 	return `${template.unitType} att ${template.attackType}, attk ${template.attack}, art ${template.armorType}, ar ${template.armor}`;
 }

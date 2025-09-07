@@ -9,10 +9,10 @@ const buildings: GsBuilding = new GsBuilding();
 const progress: GsProgress = new GsProgress();
 const ai: GsAi = new GsAi(
 	() => {
-		return progress.getUserUpgradeVariantsByTeam(TEAM_2);
+		return progress.getUpgradeVariantsByTeam(TEAM_2);
 	},
 	(factory) => {
-		progress.setUseProgressByTeam(TEAM_2, factory);
+		progress.setProgressByTeam(TEAM_2, factory);
 	},
 );
 

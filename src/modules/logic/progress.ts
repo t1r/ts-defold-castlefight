@@ -1,15 +1,28 @@
+import { FractionType } from '../types/fractions';
 import { UnitAbstractFactory } from '../types/unit';
 import { EliteSoldierFactory } from '../unit/eliteSoldier';
 import { InfantryFactory } from '../unit/infantry';
 
-const allianceProgress: Record<number, UnitAbstractFactory[]> = {
+const alliance: Record<number, UnitAbstractFactory[]> = {
 	0: [new EliteSoldierFactory(), new InfantryFactory()],
 	1: [],
 	2: [],
 };
 
-export function getProgressVariantByLevel(
+const darkElfs: Record<number, UnitAbstractFactory[]> = {
+	0: [new EliteSoldierFactory(), new InfantryFactory()],
+	1: [],
+	2: [],
+};
+
+const fractions: Record<FractionType, Record<number, UnitAbstractFactory[]>> = {
+	alliance: alliance,
+	'dark-elfs': darkElfs,
+};
+
+export function getProgressVariantByFractionAndLevel(
+	fraction: FractionType,
 	level: number,
 ): UnitAbstractFactory[] {
-	return allianceProgress[level];
+	return fractions[fraction][level];
 }

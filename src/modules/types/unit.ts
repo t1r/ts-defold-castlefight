@@ -26,6 +26,7 @@ export enum AttackType {
 }
 
 export const unitTypes = ['infantry', 'elite-soldier'] as const;
+
 export type UnitType = (typeof unitTypes)[number];
 
 export interface UnitTemplate {

@@ -1,6 +1,7 @@
 import { START_GAME_MSG, TEAM_1, TEAM_2 } from '../modules/const';
 import { gameState as gs } from '../modules/gameState';
-import { UnitAbstractFactory } from '../modules/types/unit';
+import { UnitAbstractFactory, UnitTemplate } from '../modules/types/unit';
+// import * as druid from 'druid.druid';
 
 interface props {
 	upgradeUnitList: { node: node; factory: UnitAbstractFactory }[];
@@ -22,13 +23,7 @@ export function init(this: props): void {
 	for (let index = 0; index < factories.length; index++) {
 		const factory = factories[index];
 		const template = factory.createUnitTemplate();
-		const node = createUnitCard(
-			index * 120 + 160,
-			template.attackType.toString(),
-			template.attack,
-			template.armorType.toString(),
-			0,
-		);
+		const node = createUnitCard(index * 120 + 160, buildString(template));
 		this.upgradeUnitList.push({
 			node: node,
 			factory: factory,
@@ -55,25 +50,20 @@ export function on_input(this: props, actionId: hash, action: action): void {
 	}
 }
 
-function createUnitCard(
-	y: number,
-	attackType: string,
-	attack: number,
-	armorType: string,
-	armor: number,
-): node {
-	pprint(["y", y])
+function createUnitCard(y: number, text: string): node {
+	pprint(['y', y]);
 	const nodeBox = gui.new_box_node(
 		vmath.vector3(470, y, 0),
 		vmath.vector3(400, 100, 0),
 	);
-	gui.new_text_node(
-		vmath.vector3(470, y, 0),
-		`att ${attackType}, attk ${attack}, art ${armorType}, ar ${armor}`,
-	);
+	gui.new_text_node(vmath.vector3(470, y, 0), text);
 	// gui.set_color(nodeText, vmath.vector3(1, 1, 1))
 	gui.set_color(nodeBox, vmath.vector3(0.1, 0.1, 0.1));
 	// gui.set_parent(nodeText, nodeBox)
 
 	return nodeBox;
+}
+
+function buildString(template: UnitTemplate): string {
+	return `${template.unitType} att ${template.attackType}, attk ${template.attack}, art ${template.armorType}, ar ${template.armor}`;
 }

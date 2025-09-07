@@ -30,6 +30,7 @@ export class EliteSoldierFactory implements UnitAbstractFactory {
 			attackSpeed: 700,
 			attack: 15,
 			unitType: 'elite-soldier',
+			armor: 1,
 		};
 	}
 }

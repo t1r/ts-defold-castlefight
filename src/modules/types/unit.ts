@@ -35,6 +35,7 @@ export interface UnitTemplate {
 	readonly attackSpeed: number;
 	readonly attack: number;
 	readonly unitType: UnitType;
+	readonly armor: number;
 }
 
 export interface UnitCharacteristics {

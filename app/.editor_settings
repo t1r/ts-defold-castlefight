@@ -90,10 +90,6 @@
         :scene
       ]
       [
-        "/game.project"
-        :cljfx-form-view
-      ]
-      [
         "/collections/level/upgrade/upgrade.gui"
         :scene
       ]
@@ -128,6 +124,10 @@
       [
         "/collections/level/main_menu/main_menu.gui"
         :scene
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
       ]
     ]
   }

@@ -30,6 +30,7 @@ export class InfantryFactory implements UnitAbstractFactory {
 			attackSpeed: 600,
 			attack: 10,
 			unitType: 'infantry',
+			armor: 1,
 		};
 	}
 }

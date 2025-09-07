@@ -1,4 +1,4 @@
-import { START_GAME_MSG, TEAM_1, TEAM_2 } from '../modules/const';
+import { TEAM_1 } from '../modules/const';
 import { gameState as gs } from '../modules/gameState';
 import { UnitAbstractFactory, UnitTemplate } from '../modules/types/unit';
 // import * as druid from 'druid.druid';
@@ -19,7 +19,7 @@ export function init(this: props): void {
 	this.upgradeUnitList = [];
 
 	const factories = gs.progress.getUserUpgradeVariantsByTeam(TEAM_1);
-	pprint([factories]);
+
 	for (let index = 0; index < factories.length; index++) {
 		const factory = factories[index];
 		const template = factory.createUnitTemplate();
@@ -43,7 +43,9 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		for (const item of this.upgradeUnitList) {
 			if (gui.pick_node(item.node, action.x, action.y)) {
 				gs.progress.setUseProgressByTeam(TEAM_1, item.factory);
-				gs.progress.setUseProgressByTeam(TEAM_2, item.factory);
+				gs.ai.performStartGameProgress();
+
+				// TODO refactoring
 				msg.post('controller:/controller#controller', 'close_pre_start_game');
 			}
 		}

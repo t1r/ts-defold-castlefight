@@ -28,7 +28,7 @@ export class GsUnits {
 	}
 
 	/**
-	 * TODO rework
+	 * TODO rework more universal for few units
 	 */
 	public updateInRange(getPosition: (id: hash) => vmath.vector3) {
 		const unit1 = this.units.get(TEAM_1);

@@ -42,7 +42,10 @@ export function on_input(this: props, actionId: hash, action: action): void {
 	if (actionId === hash('touch') && action.released) {
 		// Fractions
 		for (const item of this.fractionList) {
-			if (gui.pick_node(item.node, action.x, action.y)) {
+			if (
+				gui.is_enabled(item.node) &&
+				gui.pick_node(item.node, action.x, action.y)
+			) {
 				pprint(['click fraction']);
 				gs.progress.setFractionByTeam(TEAM_1, item.fraction);
 				this.selectedFraction = item.fraction;
@@ -50,6 +53,7 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		}
 		if (
 			this.selectedFraction !== undefined &&
+			gui.is_enabled(this.fractionNextNode) &&
 			gui.pick_node(this.fractionNextNode, action.x, action.y)
 		) {
 			handleFractionsNext(this);
@@ -57,7 +61,10 @@ export function on_input(this: props, actionId: hash, action: action): void {
 
 		// Units
 		for (const item of this.upgradeUnitList) {
-			if (gui.pick_node(item.node, action.x, action.y)) {
+			if (
+				gui.is_enabled(item.node) &&
+				gui.pick_node(item.node, action.x, action.y)
+			) {
 				pprint(['click unit']);
 				gs.progress.setProgressByTeam(TEAM_1, item.factory);
 				gs.ai.performStartGameProgress();
@@ -68,6 +75,7 @@ export function on_input(this: props, actionId: hash, action: action): void {
 		}
 		if (
 			this.fractionBackNode &&
+			gui.is_enabled(this.fractionBackNode) &&
 			gui.pick_node(this.fractionBackNode, action.x, action.y)
 		) {
 			handleUnitsBack(this);

@@ -114,10 +114,6 @@
         :scene
       ]
       [
-        "/scripts/pre_start_game.gui_script"
-        :code
-      ]
-      [
         "/collections/level/main_menu/main_menu.gui"
         :scene
       ]
@@ -128,6 +124,10 @@
       [
         "/collections/level/pre_start_game/pre_start_game.gui"
         :scene
+      ]
+      [
+        "/scripts/pre_start_game.gui_script"
+        :code
       ]
     ]
   }

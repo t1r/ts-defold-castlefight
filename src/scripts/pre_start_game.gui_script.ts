@@ -12,6 +12,7 @@ interface props {
 	fractionNextNode: node;
 	selectedFraction: FractionType | undefined;
 
+	fractionBackNode: node | undefined;
 	upgradeUnitList: { node: node; factory: UnitAbstractFactory }[];
 }
 
@@ -39,6 +40,7 @@ export function on_message(
 
 export function on_input(this: props, actionId: hash, action: action): void {
 	if (actionId === hash('touch') && action.released) {
+		// Fractions
 		for (const item of this.fractionList) {
 			if (gui.pick_node(item.node, action.x, action.y)) {
 				pprint(['click fraction']);
@@ -50,14 +52,10 @@ export function on_input(this: props, actionId: hash, action: action): void {
 			this.selectedFraction !== undefined &&
 			gui.pick_node(this.fractionNextNode, action.x, action.y)
 		) {
-			pprint(['click fraction next']);
-			setFractionMenuEnabled(this, false);
-
-			timer.delay(0.3, false, () => {
-				showUnitsMenu(this);
-			});
+			handleFractionsNext(this);
 		}
 
+		// Units
 		for (const item of this.upgradeUnitList) {
 			if (gui.pick_node(item.node, action.x, action.y)) {
 				pprint(['click unit']);
@@ -67,6 +65,12 @@ export function on_input(this: props, actionId: hash, action: action): void {
 				// TODO refactoring
 				msg.post('controller:/controller#controller', 'close_pre_start_game');
 			}
+		}
+		if (
+			this.fractionBackNode &&
+			gui.pick_node(this.fractionBackNode, action.x, action.y)
+		) {
+			handleUnitsBack(this);
 		}
 	}
 }
@@ -97,16 +101,15 @@ function setFractionMenuEnabled(ctx: props, enabled: boolean) {
 }
 
 function showUnitsMenu(ctx: props) {
-	// const backNode = createUiRow(UNIT_ROW_SIZE + UNIT_ROW_START_OFFSET, 'Back');
-	// ctx.fractionBackNode = backNode;
+	const backNode = createUiRow(UNIT_ROW_START_OFFSET, 'Back');
+	ctx.fractionBackNode = backNode;
 
 	const factories = gs.progress.getUpgradeVariantsByTeam(TEAM_1);
-
 	for (let index = 0; index < factories.length; index++) {
 		const factory = factories[index];
 		const template = factory.createUnitTemplate();
 		const node = createUiRow(
-			index * UNIT_ROW_SIZE + UNIT_ROW_START_OFFSET,
+			(index + 1) * UNIT_ROW_SIZE + UNIT_ROW_START_OFFSET,
 			buildUnitRowString(template),
 		);
 
@@ -115,6 +118,30 @@ function showUnitsMenu(ctx: props) {
 			factory: factory,
 		});
 	}
+}
+
+function handleFractionsNext(ctx: props) {
+	pprint(['click fraction next']);
+	setFractionMenuEnabled(ctx, false);
+
+	timer.delay(0.3, false, () => {
+		showUnitsMenu(ctx);
+	});
+}
+
+function handleUnitsBack(ctx: props) {
+	pprint(['click units back']);
+	for (const item of ctx.upgradeUnitList) {
+		gui.delete_node(item.node);
+	}
+	ctx.upgradeUnitList = [];
+	if (ctx.fractionBackNode) {
+		gui.delete_node(ctx.fractionBackNode);
+	}
+	ctx.fractionBackNode = undefined;
+	ctx.selectedFraction = undefined;
+
+	timer.delay(0.3, false, () => setFractionMenuEnabled(ctx, true));
 }
 
 function createUiRow(y: number, text: string): node {

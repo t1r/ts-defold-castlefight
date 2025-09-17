@@ -1,4 +1,4 @@
-import { ArmorType, AttackType } from '../types/unit';
+import { ArmorType, AttackType, Unit } from '../types/unit';
 
 const unarmored: Record<AttackType, number> = {
 	[AttackType.Normal]: 1,
@@ -69,9 +69,30 @@ const records: Record<ArmorType, Record<AttackType, number>> = {
 	[ArmorType.Hero]: hero,
 };
 
-export function getDamageMultiplier(
-	armor: ArmorType,
-	attack: AttackType,
-): number {
+const POSITIVE_ARMOR_MODIFIER = 0.06;
+
+function getDamageMultiplier(armor: ArmorType, attack: AttackType): number {
 	return records[armor][attack];
+}
+
+function armorModifier(defender: Unit): number {
+	const armor = defender.armor;
+	let armorModifier = 0;
+	if (armor >= 0) {
+		const tmpValue = armor * POSITIVE_ARMOR_MODIFIER;
+		armorModifier = 1 - tmpValue / (1 + tmpValue);
+	} else {
+		armorModifier = 2 - Math.pow(0.94, armor);
+	}
+
+	return armorModifier;
+}
+
+export function calculateDamage(attacker: Unit, defender: Unit): number {
+	const dmg =
+		attacker.attack *
+		getDamageMultiplier(defender.armorType, attacker.attackType) *
+		armorModifier(defender);
+
+	return dmg;
 }

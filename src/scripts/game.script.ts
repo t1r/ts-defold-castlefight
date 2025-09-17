@@ -1,7 +1,7 @@
 import * as monarch from 'monarch.monarch';
 import { NAV_PRE_START_GAME, TEAM_1, TEAM_2 } from '../modules/const';
 import { gameState as gs } from '../modules/gameState';
-import { getDamageMultiplier } from '../modules/logic/damage';
+import { calculateDamage } from '../modules/logic/damage';
 import { Building } from '../modules/types/building';
 import { ArmorType, Unit, UnitState } from '../modules/types/unit';
 
@@ -28,8 +28,8 @@ export function init(this: props): void {
 
 export function update(this: props, dt: number): void {
 	// TODO mb revork
-	if (!gs.progress.isAllFactoriesReady()){
-		return
+	if (!gs.progress.isAllFactoriesReady()) {
+		return;
 	}
 	// pprint(["update", dt])
 	handleUpdateUnits(dt);
@@ -163,20 +163,17 @@ function movingTo(element: Unit, dt: number, target: vmath.vector3): void {
 	go.set_position(newPosition, element.id);
 }
 
-function handleAttack(element: Unit, dt: number) {
+function handleAttack(attacker: Unit, dt: number) {
 	const enemy = gs.units
 		.getAll()
-		.find((value) => value.id === element.enemyInAttackRange[0]);
+		.find((value) => value.id === attacker.enemyInAttackRange[0]);
 
 	if (enemy) {
-		if (element.elapsedAttackTime < element.attackSpeed) {
-			element.elapsedAttackTime += dt * 1000;
+		if (attacker.elapsedAttackTime < attacker.attackSpeed) {
+			attacker.elapsedAttackTime += dt * 1000;
 		} else {
-			element.elapsedAttackTime = 0;
-			enemy.hp =
-				enemy.hp -
-				element.attack *
-					getDamageMultiplier(enemy.armorType, element.attackType);
+			attacker.elapsedAttackTime = 0;
+			enemy.hp = enemy.hp - calculateDamage(attacker, enemy);
 		}
 	}
 }

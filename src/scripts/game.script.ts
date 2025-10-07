@@ -1,12 +1,9 @@
-import { createUnit } from '../modules/factory';
-import {
-	ArmorType,
-	Building,
-	Unit,
-	UnitState,
-	UnitType,
-	gameState as gs,
-} from '../modules/gameState';
+import * as monarch from 'monarch.monarch';
+import { NAV_PRE_START_GAME, TEAM_1, TEAM_2 } from '../modules/const';
+import { gameState as gs } from '../modules/gameState';
+import { calculateDamage } from '../modules/logic/damage';
+import { Building } from '../modules/types/building';
+import { ArmorType, Unit, UnitState } from '../modules/types/unit';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface props {}
@@ -25,18 +22,33 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 
 	spawnBuildings();
+
+	monarch.show(NAV_PRE_START_GAME);
 }
 
 export function update(this: props, dt: number): void {
+	// TODO mb revork
+	if (!gs.progress.isAllFactoriesReady()) {
+		return;
+	}
+	// pprint(["update", dt])
 	handleUpdateUnits(dt);
 	handleUpdateBuildings(dt);
 }
 
-export function on_input(this: props, _actionId: hash, action: action): void {
-	if (_actionId === hash('touch') && action.pressed) {
+export function on_input(this: props, actionId: hash, action: action): void {
+	if (actionId === hash('touch') && action.pressed) {
 		pprint('----------------- touch -----------------');
-		pprint([gs.getUnits()]);
+		pprint([
+			gs.units.getAll().map((e) => ({ unit: e, pos: go.get_position(e.id) })),
+		]);
 	}
+	// else if (actionId === hash('upgrade') && action.pressed) {
+	// 	pprint('----------------- upgrade -----------------');
+	// 	// TODO
+	// 	// msg.post('/dumb', 'enable');
+	// 	monarch.show(hash('upgrade'));
+	// }
 }
 
 export function on_message(
@@ -48,8 +60,10 @@ export function on_message(
 	pprint([_messageId, _sender]);
 }
 
+/* -------------- TODO move to module --------------- */
 function handleUpdateUnits(dt: number) {
-	const units = gs.getUnits();
+	gs.units.updateInRange((id) => go.get_position(id));
+	const units = gs.units.getAll();
 
 	for (let i = 0; i < units.length; i++) {
 		const unit = units[i];
@@ -77,11 +91,11 @@ function handleUpdateUnits(dt: number) {
 }
 
 function handleUpdateBuildings(dt: number) {
-	const buildings = gs.getBuildings();
+	const buildings = gs.buildings.getAll();
 	for (let i = 0; i < buildings.length; i++) {
 		const building = buildings[i];
-		if (building.timeToRespawnUnit <= 0) {
-			spawnUnit(building.team, building.unitType);
+		if (building.timeToRespawnUnit <= 0 && !gs.units.getByTeam(building.team)) {
+			spawnUnit(building.team);
 			building.timeToRespawnUnit = building.originTimeToRespawnUnit;
 		} else {
 			building.timeToRespawnUnit -= dt;
@@ -94,34 +108,38 @@ function spawnBuildings() {
 		hp: 500,
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
-		unitType: 'infantry',
-		team: 1,
+		team: TEAM_1,
 		id: hash('buildingTeam1'),
 		timeToRespawnUnit: 0,
 	};
-	gs.addBuilding(building1);
+	gs.buildings.setByTeam(TEAM_1, building1);
 
 	const building2: Building = {
 		hp: 500,
 		armorType: ArmorType.Heavy,
 		originTimeToRespawnUnit: 10,
-		unitType: 'elite-soldier',
-		team: 2,
+		team: TEAM_2,
 		id: hash('buildingTeam2'),
 		timeToRespawnUnit: 0,
 	};
-	gs.addBuilding(building2);
+	gs.buildings.setByTeam(TEAM_2, building2);
 }
 
-function spawnUnit(team: number, unitType: UnitType) {
-	const position = team === 1 ? BASE_TEAM_1 : BASE_TEAM_2;
+function spawnUnit(team: number) {
+	const position = team === TEAM_1 ? BASE_TEAM_1 : BASE_TEAM_2;
+	const unitFactory = gs.progress.getByTeam(team)?.factory;
+	if (!unitFactory) {
+		return;
+	}
+
+	const template = unitFactory.createUnitTemplate();
 
 	const props = {
-		type: hash(unitType),
+		type: hash(template.unitType),
 	};
 	const id = factory.create('/factories#unit', position, undefined, props);
-	const unit = createUnit(id, team, unitType);
-	gs.addUnit(unit);
+	const unit = unitFactory.createUnit(id, team, template);
+	gs.units.setByTeam(team, unit);
 }
 
 function movingToEnemy(element: Unit, dt: number): void {
@@ -145,17 +163,17 @@ function movingTo(element: Unit, dt: number, target: vmath.vector3): void {
 	go.set_position(newPosition, element.id);
 }
 
-function handleAttack(element: Unit, dt: number) {
-	const enemy = gs
-		.getUnits()
-		.find((value) => value.id === element.nearEnemy[0]);
+function handleAttack(attacker: Unit, dt: number) {
+	const enemy = gs.units
+		.getAll()
+		.find((value) => value.id === attacker.enemyInAttackRange[0]);
 
 	if (enemy) {
-		if (element.elapsedAttackTime < element.attackSpeed) {
-			element.elapsedAttackTime += dt * 1000;
+		if (attacker.elapsedAttackTime < attacker.attackSpeed) {
+			attacker.elapsedAttackTime += dt * 1000;
 		} else {
-			element.elapsedAttackTime = 0;
-			enemy.hp = enemy.hp - element.attack;
+			attacker.elapsedAttackTime = 0;
+			enemy.hp = enemy.hp - calculateDamage(attacker, enemy);
 		}
 	}
 }
@@ -185,7 +203,7 @@ function handleDead(element: Unit, dt: number) {
 	}
 	if (element.remainingTimeToDelete <= 0) {
 		go.delete(element.id);
-		gs.removeUnit(element.id);
+		gs.units.removeByHash(element.id);
 	} else {
 		element.remainingTimeToDelete -= dt;
 	}

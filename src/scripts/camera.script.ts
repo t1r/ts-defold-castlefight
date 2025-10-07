@@ -9,6 +9,7 @@ export function init(this: props): void {
 	msg.post('.', 'acquire_input_focus');
 	msg.post('#', 'use_camera_projection');
 }
+
 export function on_message(
 	this: props,
 	messageId: hash,
@@ -32,7 +33,7 @@ export function on_input(this: props, actionId: hash, _action: action): void {
 			go.PLAYBACK_ONCE_FORWARD,
 			newPosition,
 			go.EASING_LINEAR,
-			0.5,
+			0.2,
 			0,
 		);
 	} else if (actionId === hash('left')) {
@@ -44,7 +45,31 @@ export function on_input(this: props, actionId: hash, _action: action): void {
 			go.PLAYBACK_ONCE_FORWARD,
 			newPosition,
 			go.EASING_LINEAR,
-			0.5,
+			0.2,
+			0,
+		);
+	} else if (actionId === hash('up')) {
+		const position = go.get('.', 'position') as vmath.vector3;
+		const newPosition = vmath.vector3(position.x, position.y + 50, position.z);
+		go.animate(
+			'.',
+			'position',
+			go.PLAYBACK_ONCE_FORWARD,
+			newPosition,
+			go.EASING_LINEAR,
+			0.2,
+			0,
+		);
+	} else if (actionId === hash('down')) {
+		const position = go.get('.', 'position') as vmath.vector3;
+		const newPosition = vmath.vector3(position.x, position.y - 50, position.z);
+		go.animate(
+			'.',
+			'position',
+			go.PLAYBACK_ONCE_FORWARD,
+			newPosition,
+			go.EASING_LINEAR,
+			0.2,
 			0,
 		);
 	}

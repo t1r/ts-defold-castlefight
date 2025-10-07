@@ -1,4 +1,5 @@
-import { gameState as gs, Unit, UnitState, unitTypes } from '../modules/gameState';
+import { gameState as gs } from '../modules/gameState';
+import { Unit, UnitState, unitTypes } from '../modules/types/unit';
 
 interface action {
 	pressed: boolean;
@@ -49,7 +50,7 @@ export function init(this: props): void {
 export function final(this: props): void {}
 
 export function update(this: props, _dt: number): void {
-	const unit = gs.getUnits().find((element) => element.id === go.get_id());
+	const unit = gs.units.getAll().find((element) => element.id === go.get_id());
 	this.unitData = unit;
 
 	const state = this.unitData?.state;
@@ -63,31 +64,16 @@ export function update(this: props, _dt: number): void {
 	) {
 		on_moving(this, unit);
 	}
-	// TODO damaged
-	// on_damaged(this);
 }
 
 export function on_input(this: props, _actionId: hash, _action: action): void {}
 
 export function on_message(
 	this: props,
-	messageId: hash,
-	message: message,
+	_messageId: hash,
+	_message: message,
 	_sender: url,
 ): void {
-	if (messageId === hash('trigger_response')) {
-		const currentId = go.get_id();
-		gs.updateNearEnemy(
-			gs.getUnits(),
-			currentId,
-			message.enter === true,
-			message.other_id,
-			message.own_group,
-		);
-		// pprint(["TRIGGER ", message])
-	} else if (messageId !== hash('collision_response')) {
-		// pprint([messageId]);
-	}
 }
 
 export function on_attack(ctx: props) {
@@ -95,15 +81,6 @@ export function on_attack(ctx: props) {
 		return;
 	}
 	resetAnimation();
-
-	// go.animate(
-	// 	SPRITE_ID,
-	// 	'tint.w',
-	// 	go.PLAYBACK_LOOP_PINGPONG,
-	// 	0,
-	// 	go.EASING_INOUTQUAD,
-	// 	3,
-	// );
 
 	go.animate(
 		SPRITE_ID,

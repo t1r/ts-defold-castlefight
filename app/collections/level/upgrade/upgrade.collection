@@ -1,0 +1,14 @@
+name: "upgrade"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"upgrade\"\n"
+  "  component: \"/collections/level/upgrade/upgrade.gui\"\n"
+  "}\n"
+  ""
+  position {
+    x: 203.0
+    y: 184.0
+  }
+}
